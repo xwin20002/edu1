@@ -6,59 +6,155 @@
   <title>第 10 課：一棵小樹｜教學駕駛艙</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    :root { --board:#1a2a1a; --board-light:#243524; --chalk:#e8e4d8; --chalk-dim:#a8a498;
-      --yellow:#ffd54f; --pink:#ff8a80; --blue:#81d4fa; --green:#a5d6a7;
-      --wood:#8d6e4a; --wood-dark:#5d4530; --wood-light:#a8875a; }
+    :root{--board:#1a2a1a;--board-light:#243524;--chalk:#e8e4d8;--chalk-dim:#a8a498;
+      --yellow:#ffd54f;--pink:#ff8a80;--blue:#81d4fa;--green:#a5d6a7;
+      --wood:#8d6e4a;--wood-dark:#5d4530;--wood-light:#a8875a;--fsize:16}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;background:var(--board);color:var(--chalk);min-height:100vh}
+    body{font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;background:var(--board);color:var(--chalk);min-height:100vh;font-size:calc(var(--fsize)*1px)}
     header{background:linear-gradient(180deg,var(--wood-light) 0%,var(--wood) 40%,var(--wood-dark) 100%);padding:18px 24px 14px;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.5);border-bottom:3px solid #3a2a1a}
-    header h1{font-size:1.3rem;font-weight:700;text-shadow:1px 1px 3px rgba(0,0,0,.5)}
-    header .meta{font-size:.78rem;opacity:.85;margin-top:4px}
-    .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:2px 10px;font-size:.72rem;margin-right:6px}
-    .mode-bar{background:#0d1a0d;display:flex;align-items:center;justify-content:space-between;padding:8px 24px;font-size:.8rem;color:var(--chalk-dim);border-bottom:1px solid #2a3a2a}
-    .mode-btn{background:var(--yellow);color:#1a1a1a;border:none;border-radius:20px;padding:5px 16px;font-size:.78rem;cursor:pointer;font-family:inherit;font-weight:600}
+    header h1{font-size:1.8em;font-weight:700;text-shadow:1px 1px 3px rgba(0,0,0,.5)}
+    header .meta{font-size:.95em;opacity:.85;margin-top:6px}
+    .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:3px 12px;font-size:.88em;margin-right:6px}
+    .mode-bar{background:#0d1a0d;display:flex;align-items:center;justify-content:space-between;padding:10px 24px;font-size:.95em;color:var(--chalk-dim);border-bottom:1px solid #2a3a2a}
+    .mode-btn{background:var(--yellow);color:#1a1a1a;border:none;border-radius:20px;padding:6px 18px;font-size:.9em;cursor:pointer;font-family:inherit;font-weight:600}
     .container{max-width:900px;margin:0 auto;padding:20px 20px 80px}
-    .section-title{display:flex;align-items:center;gap:10px;font-size:1.05rem;font-weight:700;color:var(--yellow);margin:32px 0 14px;padding-bottom:8px;border-bottom:2px dashed var(--yellow)}
+    .section-title{display:flex;align-items:center;gap:10px;font-size:1.05em;font-weight:700;color:var(--yellow);margin:32px 0 14px;padding-bottom:8px;border-bottom:2px dashed var(--yellow)}
     .card{background:var(--board-light);border:2px solid rgba(232,228,216,.2);border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:inset 0 0 20px rgba(0,0,0,.3)}
     .obj-grid{display:flex;flex-wrap:wrap;gap:8px}
-    .obj-chip{background:rgba(255,213,79,.1);border:1px dashed var(--yellow);border-radius:8px;padding:6px 12px;font-size:.82rem;color:var(--yellow)}
-    .obj-chip .num{background:var(--yellow);color:#1a1a1a;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-right:6px}
+    .obj-chip{background:rgba(255,213,79,.1);border:1px dashed var(--yellow);border-radius:8px;padding:6px 12px;font-size:.82em;color:var(--yellow)}
+    .obj-chip .num{background:var(--yellow);color:#1a1a1a;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.7em;font-weight:700;margin-right:6px}
     .topic-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-    .topic-pill{background:rgba(129,212,250,.2);border:1px solid var(--blue);color:var(--blue);border-radius:20px;padding:6px 14px;font-size:.82rem}
-    .topic-arrow{color:var(--chalk-dim);font-size:1rem}
+    .topic-pill{background:rgba(129,212,250,.2);border:1px solid var(--blue);color:var(--blue);border-radius:20px;padding:6px 14px;font-size:.82em}
+    .topic-arrow{color:var(--chalk-dim);font-size:1em}
     .carousel{position:relative;border-radius:10px;border:2px solid rgba(232,228,216,.15);background:#0d1a0d;margin-bottom:12px}
     .carousel-inner img{width:100%;height:auto;max-height:520px;object-fit:contain;display:none;border-radius:8px;cursor:pointer}
     .carousel-inner img.active{display:block}
-    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:white;border:none;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center}
+    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:white;border:none;width:36px;height:36px;border-radius:50%;font-size:1.2em;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center}
     .carousel-btn:hover{background:rgba(0,0,0,.85)}
-    .carousel-btn.prev{left:8px}
-    .carousel-btn.next{right:8px}
+    .carousel-btn.prev{left:8px}.carousel-btn.next{right:8px}
     .carousel-dots{display:flex;justify-content:center;gap:6px;padding:8px 0}
     .carousel-dot{width:10px;height:10px;border-radius:50%;background:var(--chalk-dim);border:none;cursor:pointer;transition:all .2s}
     .carousel-dot.active{background:var(--yellow);transform:scale(1.3)}
-    .fullscreen-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;cursor:pointer}
+    .fullscreen-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:600;align-items:center;justify-content:center;cursor:pointer}
     .fullscreen-overlay.show{display:flex}
     .fullscreen-overlay img{max-width:95%;max-height:90vh;border-radius:8px}
+    /* Vertical summary */
+    .vert-summary{writing-mode:vertical-rl;text-orientation:mixed;line-height:2.4;font-size:1.05em;min-height:180px;max-height:320px;overflow-x:auto;width:100%}
+    /* Vocab */
     .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:10px}
     .vocab-item{background:rgba(129,212,250,.1);border:1px solid rgba(129,212,250,.3);border-radius:8px;padding:10px 14px}
-    .vocab-word{font-size:1.1rem;font-weight:700;color:var(--blue);margin-bottom:4px}
-    .vocab-meaning{font-size:.82rem;color:var(--chalk-dim)}
-    .char-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .char-box{background:rgba(255,213,79,.1);border:2px solid rgba(255,213,79,.4);border-radius:8px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(--yellow)}
+    .vocab-word{font-size:1.1em;font-weight:700;color:var(--blue);margin-bottom:4px}
+    .vocab-meaning{font-size:.82em;color:var(--chalk-dim)}
+    /* ── Char grid with CORRECT zhuyin layout ── */
+    /* No writing-mode tricks — tone mark manually placed RIGHT of last symbol */
+    .char-grid-v{display:flex;flex-direction:row-reverse;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+    .char-box-v{display:inline-flex;align-items:center;gap:5px;background:rgba(255,213,79,.1);border:2px solid rgba(255,213,79,.4);border-radius:10px;padding:8px 10px;cursor:pointer;transition:background .15s}
+    .char-box-v:hover{background:rgba(255,213,79,.25)}
+    .zy-tooltip{position:fixed;background:#1a2a1a;border:1.5px solid var(--yellow);border-radius:10px;padding:10px 14px;z-index:500;pointer-events:none;display:none;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.6);min-width:70px}
+    .zy-tooltip.show{display:block}
+    .zy-tip-char{font-size:2.4em;font-weight:700;color:var(--yellow);line-height:1.1;font-family:'Noto Sans TC',sans-serif}
+    .zy-tip-zy{font-size:.95em;color:#9abcaa;margin-top:4px;letter-spacing:2px}
+    .zy-tip-hint{font-size:.65em;color:var(--chalk-dim);margin-top:5px}
+    .char-main{font-size:1.7em;font-weight:700;color:var(--yellow);line-height:1;font-family:'Noto Sans TC',sans-serif}
+    .zy-col{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
+    .zy-col > span{font-size:.62em;color:#9abcaa;white-space:nowrap;display:block}
+    .zy-row{display:flex !important;align-items:baseline;gap:1px}
+    .zy-tone{font-size:.82em;color:#b8d4c4;vertical-align:super;line-height:1}
+    /* Quiz */
     .quiz-item{background:var(--board-light);border:2px solid rgba(232,228,216,.2);border-radius:10px;padding:16px;margin-bottom:12px}
-    .quiz-q{font-size:.95rem;margin-bottom:12px;line-height:1.6}
+    .quiz-q{font-size:.95em;margin-bottom:12px;line-height:1.6}
     .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .quiz-opt{background:rgba(232,228,216,.08);border:1px solid rgba(232,228,216,.2);border-radius:8px;padding:8px 14px;font-size:.85rem;cursor:pointer;text-align:left;color:var(--chalk);font-family:inherit;transition:all .2s}
+    .quiz-opt{background:rgba(232,228,216,.08);border:1px solid rgba(232,228,216,.2);border-radius:8px;padding:8px 14px;font-size:.85em;cursor:pointer;text-align:left;color:var(--chalk);font-family:inherit;transition:all .2s}
     .quiz-opt:hover{background:rgba(255,213,79,.15);border-color:var(--yellow)}
     .quiz-opt.correct{background:rgba(165,214,167,.25);border-color:var(--green);color:var(--green)}
     .quiz-opt.wrong{background:rgba(255,138,128,.2);border-color:var(--pink);color:var(--pink)}
-    .back-link{color:var(--chalk-dim);text-decoration:none;font-size:.85rem}
+    .back-link{color:var(--chalk-dim);text-decoration:none;font-size:.85em}
     .back-link:hover{color:var(--yellow)}
+    /* ── Floating Tool Panel ─────────────────────── */
+    .tool-panel{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:400;display:flex;align-items:stretch}
+    .tool-toggle{background:var(--wood);color:#fff;border:none;width:28px;border-radius:10px 0 0 10px;cursor:pointer;font-size:.82em;writing-mode:vertical-rl;letter-spacing:3px;padding:14px 4px;box-shadow:-3px 0 12px rgba(0,0,0,.4);transition:background .2s}
+    .tool-toggle:hover{background:var(--wood-light)}
+    .tool-content{background:#162616;border:2px solid rgba(232,228,216,.18);border-right:none;border-radius:12px 0 0 12px;padding:14px 12px;display:none;flex-direction:column;gap:14px;width:164px;box-shadow:-4px 0 20px rgba(0,0,0,.5)}
+    .tool-content.open{display:flex}
+    .tool-lbl{font-size:.7em;color:var(--chalk-dim);letter-spacing:1px;border-bottom:1px solid rgba(232,228,216,.1);padding-bottom:4px;margin-bottom:2px}
+    .font-ctrl{display:flex;align-items:center;gap:6px;justify-content:center}
+    .font-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.4);color:var(--yellow);border-radius:6px;width:32px;height:30px;font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .font-btn:hover{background:rgba(255,213,79,.3)}
+    .font-val{font-size:.8em;color:var(--chalk-dim);min-width:38px;text-align:center}
+    .timer-disp{font-family:'Courier New',monospace;font-size:1.9em;color:var(--yellow);text-align:center;letter-spacing:2px;margin:4px 0}
+    .timer-disp.running{color:var(--green)}
+    .timer-disp.ended{color:var(--pink);animation:blink .7s infinite}
+    @keyframes blink{50%{opacity:.3}}
+    .timer-presets{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+    .timer-preset{background:rgba(129,212,250,.1);border:1px solid rgba(129,212,250,.3);color:var(--blue);border-radius:6px;padding:3px 7px;font-size:.72em;cursor:pointer}
+    .timer-preset:hover{background:rgba(129,212,250,.25)}
+    .timer-btns{display:flex;gap:4px;justify-content:center}
+    .timer-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.3);color:var(--yellow);border-radius:6px;padding:4px 0;font-size:.82em;cursor:pointer;flex:1}
+    .timer-btn:hover{background:rgba(255,213,79,.3)}
+    .timer-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+    .draw-btn{background:rgba(232,228,216,.1);border:1px solid rgba(232,228,216,.2);color:var(--chalk);border-radius:6px;padding:5px 0;font-size:.78em;cursor:pointer;width:100%;text-align:center}
+    .draw-btn:hover{background:rgba(232,228,216,.2)}
+    .draw-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+    .draw-colors{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+    .draw-color{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+    .draw-color:hover,.draw-color.active{transform:scale(1.3);border-color:white}
+    .draw-sizes{display:flex;gap:6px;justify-content:center;align-items:center}
+    .draw-size{border-radius:50%;background:var(--chalk);cursor:pointer;transition:transform .15s;border:2px solid transparent}
+    .draw-size.active{border-color:var(--yellow);transform:scale(1.2)}
+    #draw-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:350;display:none;cursor:crosshair;touch-action:none}
+    #draw-canvas.active{display:block}
     @media(max-width:600px){.quiz-opts{grid-template-columns:1fr}}
-</style>
+  </style>
 </head>
 <body>
+  <canvas id="draw-canvas"></canvas>
   <div id="fullscreen" class="fullscreen-overlay"><img id="fs-img" src="" alt=""></div>
+
+  <div class="tool-panel">
+    <div class="tool-content" id="tool-content">
+      <div>
+        <div class="tool-lbl">字　級</div>
+        <div class="font-ctrl" style="margin-top:6px">
+          <button class="font-btn" id="font-dec">A−</button>
+          <span class="font-val" id="font-val">16px</span>
+          <button class="font-btn" id="font-inc">A＋</button>
+        </div>
+      </div>
+      <div>
+        <div class="tool-lbl">計時器</div>
+        <div class="timer-disp" id="timer-disp">05:00</div>
+        <div class="timer-presets">
+          <button class="timer-preset" data-sec="60">1分</button>
+          <button class="timer-preset" data-sec="180">3分</button>
+          <button class="timer-preset" data-sec="300">5分</button>
+          <button class="timer-preset" data-sec="600">10分</button>
+        </div>
+        <div class="timer-btns" style="margin-top:6px">
+          <button class="timer-btn" id="timer-start">▶ 開始</button>
+          <button class="timer-btn" id="timer-reset">↺ 重置</button>
+        </div>
+      </div>
+      <div>
+        <div class="tool-lbl">畫　筆</div>
+        <button class="draw-btn" id="draw-toggle" style="margin:6px 0">🖌️ 開啟畫筆</button>
+        <div class="draw-colors" style="margin-bottom:6px">
+          <div class="draw-color active" data-color="#ffd54f" style="background:#ffd54f"></div>
+          <div class="draw-color" data-color="#ff8a80" style="background:#ff8a80"></div>
+          <div class="draw-color" data-color="#81d4fa" style="background:#81d4fa"></div>
+          <div class="draw-color" data-color="#a5d6a7" style="background:#a5d6a7"></div>
+          <div class="draw-color" data-color="#ffffff" style="background:#fff;border:1px solid #666"></div>
+        </div>
+        <div class="draw-sizes" style="margin-bottom:6px">
+          <div class="draw-size" data-size="3" style="width:8px;height:8px"></div>
+          <div class="draw-size active" data-size="7" style="width:14px;height:14px"></div>
+          <div class="draw-size" data-size="14" style="width:22px;height:22px"></div>
+        </div>
+        <button class="draw-btn" id="draw-clear">🗑️ 清除畫布</button>
+      </div>
+    </div>
+    <button class="tool-toggle" id="tool-toggle">工具</button>
+  </div>
+
   <header>
     <h1>🌱 第 10 課：一棵小樹</h1>
     <div class="meta">
@@ -71,73 +167,112 @@
     <button class="mode-btn" id="mode-btn">✏️ 切換教師模式</button>
   </div>
   <div class="container">
-
     <div class="section-title"><span>🎯</span> 學習目標</div>
     <div class="card"><div class="obj-grid"><div class="obj-chip"><span class="num">1</span>認讀16個習寫字與4個認讀字</div><div class="obj-chip"><span class="num">2</span>理解種子成長歷程</div><div class="obj-chip"><span class="num">3</span>說出從害怕到勇敢的轉變</div><div class="obj-chip"><span class="num">4</span>體會勇敢面對挑戰的重要</div><div class="obj-chip"><span class="num">5</span>感受鼓勵的力量</div></div></div>
-
     <div class="section-title"><span>🗺️</span> 故事脈絡</div>
-    <div class="card"><div class="topic-flow"><span class="topic-pill">聽到打雷 ⛈️</span> <span class="topic-arrow">→</span> <span class="topic-pill">心裡害怕 😨</span> <span class="topic-arrow">→</span> <span class="topic-pill">得到鼓勵 🌞</span> <span class="topic-arrow">→</span> <span class="topic-pill">決定勇敢 💪</span> <span class="topic-arrow">→</span> <span class="topic-pill">長成小樹 🌳</span></div></div>
-
+    <div class="card"><div class="topic-flow"><span class="topic-pill">聽到打雷 ⛈️</span><span class="topic-arrow">→</span><span class="topic-pill">心裡害怕 😨</span><span class="topic-arrow">→</span><span class="topic-pill">得到鼓勵 🌞</span><span class="topic-arrow">→</span><span class="topic-pill">決定勇敢 💪</span><span class="topic-arrow">→</span><span class="topic-pill">長成小樹 🌳</span></div></div>
     <div class="section-title"><span>📽️</span> NotebookLM 教學簡報</div>
     <div class="carousel" id="main-carousel">
       <div class="carousel-inner"><img src="assets/slide_01.jpg" alt="投影片1" class="active"><img src="assets/slide_02.jpg" alt="投影片2"><img src="assets/slide_03.jpg" alt="投影片3"><img src="assets/slide_04.jpg" alt="投影片4"><img src="assets/slide_05.jpg" alt="投影片5"><img src="assets/slide_06.jpg" alt="投影片6"><img src="assets/slide_07.jpg" alt="投影片7"><img src="assets/slide_08.jpg" alt="投影片8"><img src="assets/slide_09.jpg" alt="投影片9"><img src="assets/slide_10.jpg" alt="投影片10"></div>
       <button class="carousel-btn prev">&#8249;</button>
       <button class="carousel-btn next">&#8250;</button>
-      <div class="carousel-dots"><button class="carousel-dot active"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button></div>
+      <div class="carousel-dots"><button class="carousel-dot  active"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button></div>
     </div>
-
     <div class="section-title"><span>📖</span> 課文主旨</div>
-    <div class="card"><p style="line-height:1.9;font-size:.95rem;">泥土裡的種子，在大樹和麻雀的鼓勵下，決定勇敢地伸出雙手，長成一棵小樹。每個人心裡都有一顆勇敢的種子。</p></div>
-
+    <div class="card"><p class="vert-summary">泥土裡的種子，在大樹和麻雀的鼓勵下，決定勇敢地伸出雙手，長成一棵小樹。每個人心裡都有一顆勇敢的種子。</p></div>
     <div class="section-title"><span>💬</span> 重點詞彙</div>
     <div class="card"><div class="vocab-grid"><div class="vocab-item"><div class="vocab-word">發抖</div><div class="vocab-meaning">因害怕或寒冷而身體顫動</div></div><div class="vocab-item"><div class="vocab-word">溫暖</div><div class="vocab-meaning">溫度和暖，也比喻關愛</div></div><div class="vocab-item"><div class="vocab-word">溫柔</div><div class="vocab-meaning">動作或個性和緩親切</div></div><div class="vocab-item"><div class="vocab-word">勇敢</div><div class="vocab-meaning">不害怕，有膽量面對困難</div></div><div class="vocab-item"><div class="vocab-word">雙手</div><div class="vocab-meaning">兩隻手；這裡指種子的兩片嫩葉</div></div></div></div>
-
     <div class="section-title"><span>✍️</span> 習寫生字</div>
-    <div class="card"><div class="char-grid"><div class="char-box">芽</div><div class="char-box">打</div><div class="char-box">雷</div><div class="char-box">土</div><div class="char-box">抖</div><div class="char-box">害</div><div class="char-box">怕</div><div class="char-box">咬</div><div class="char-box">樹</div><div class="char-box">暖</div><div class="char-box">風</div><div class="char-box">兒</div><div class="char-box">勇</div><div class="char-box">敢</div><div class="char-box">這</div><div class="char-box">棵</div></div></div>
-
+    <div class="card"><div class="char-grid-v"><div class="char-box-v" data-char="芽" data-zy="ㄧㄚˊ"><span class="char-main">芽</span><div class="zy-col"><span>ㄧ</span><span class="zy-row">ㄚ<span class="zy-tone">ˊ</span></span></div></div><div class="char-box-v" data-char="打" data-zy="ㄉㄚˇ"><span class="char-main">打</span><div class="zy-col"><span>ㄉ</span><span class="zy-row">ㄚ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="雷" data-zy="ㄌㄟˊ"><span class="char-main">雷</span><div class="zy-col"><span>ㄌ</span><span class="zy-row">ㄟ<span class="zy-tone">ˊ</span></span></div></div><div class="char-box-v" data-char="土" data-zy="ㄊㄨˇ"><span class="char-main">土</span><div class="zy-col"><span>ㄊ</span><span class="zy-row">ㄨ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="抖" data-zy="ㄉㄡˇ"><span class="char-main">抖</span><div class="zy-col"><span>ㄉ</span><span class="zy-row">ㄡ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="害" data-zy="ㄏㄞˋ"><span class="char-main">害</span><div class="zy-col"><span>ㄏ</span><span class="zy-row">ㄞ<span class="zy-tone">ˋ</span></span></div></div><div class="char-box-v" data-char="怕" data-zy="ㄆㄚˋ"><span class="char-main">怕</span><div class="zy-col"><span>ㄆ</span><span class="zy-row">ㄚ<span class="zy-tone">ˋ</span></span></div></div><div class="char-box-v" data-char="咬" data-zy="ㄧㄠˇ"><span class="char-main">咬</span><div class="zy-col"><span>ㄧ</span><span class="zy-row">ㄠ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="樹" data-zy="ㄕㄨˋ"><span class="char-main">樹</span><div class="zy-col"><span>ㄕ</span><span class="zy-row">ㄨ<span class="zy-tone">ˋ</span></span></div></div><div class="char-box-v" data-char="暖" data-zy="ㄋㄨㄢˇ"><span class="char-main">暖</span><div class="zy-col"><span>ㄋ</span><span>ㄨ</span><span class="zy-row">ㄢ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="風" data-zy="ㄈㄥ"><span class="char-main">風</span><div class="zy-col"><span>ㄈ</span><span>ㄥ</span></div></div><div class="char-box-v" data-char="兒" data-zy="ㄦˊ"><span class="char-main">兒</span><div class="zy-col"><span class="zy-row">ㄦ<span class="zy-tone">ˊ</span></span></div></div><div class="char-box-v" data-char="勇" data-zy="ㄩㄥˇ"><span class="char-main">勇</span><div class="zy-col"><span>ㄩ</span><span class="zy-row">ㄥ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="敢" data-zy="ㄍㄢˇ"><span class="char-main">敢</span><div class="zy-col"><span>ㄍ</span><span class="zy-row">ㄢ<span class="zy-tone">ˇ</span></span></div></div><div class="char-box-v" data-char="這" data-zy="ㄓㄜˋ"><span class="char-main">這</span><div class="zy-col"><span>ㄓ</span><span class="zy-row">ㄜ<span class="zy-tone">ˋ</span></span></div></div><div class="char-box-v" data-char="棵" data-zy="ㄎㄜ"><span class="char-main">棵</span><div class="zy-col"><span>ㄎ</span><span>ㄜ</span></div></div></div></div>
     <div class="section-title"><span>📝</span> 形成性評量</div>
-    <div class="quiz-item"><div class="quiz-q">❓ 種子一開始為什麼害怕？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="0">怕太熱</button><button class="quiz-opt" data-correct="1">聽到打雷</button><button class="quiz-opt" data-correct="0">怕黑暗</button><button class="quiz-opt" data-correct="0">怕風吹</button></div></div><div class="quiz-item"><div class="quiz-q">❓ 大樹怎麼鼓勵種子？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="1">陽光很溫暖</button><button class="quiz-opt" data-correct="0">風兒很溫柔</button><button class="quiz-opt" data-correct="0">不用怕蟲</button><button class="quiz-opt" data-correct="0">快快長大</button></div></div><div class="quiz-item"><div class="quiz-q">❓ 種子最後決定怎麼做？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="0">繼續睡覺</button><button class="quiz-opt" data-correct="0">躲得更深</button><button class="quiz-opt" data-correct="1">勇敢地往上長</button><button class="quiz-opt" data-correct="0">叫大樹幫忙</button></div></div><div class="quiz-item"><div class="quiz-q">❓ 「發抖」是什麼意思？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="0">很高興</button><button class="quiz-opt" data-correct="1">身體不停顫動</button><button class="quiz-opt" data-correct="0">大聲歌唱</button><button class="quiz-opt" data-correct="0">快速奔跑</button></div></div>
+    <div class="quiz-item"><div class="quiz-q">❓ 種子一開始為什麼害怕？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="0">怕太熱</button><button class="quiz-opt" data-correct="1">聽到打雷</button><button class="quiz-opt" data-correct="0">怕黑暗</button><button class="quiz-opt" data-correct="0">怕風吹</button></div></div>
+<div class="quiz-item"><div class="quiz-q">❓ 大樹怎麼鼓勵種子？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="1">陽光很溫暖</button><button class="quiz-opt" data-correct="0">風兒很溫柔</button><button class="quiz-opt" data-correct="0">不用怕蟲</button><button class="quiz-opt" data-correct="0">快快長大</button></div></div>
+<div class="quiz-item"><div class="quiz-q">❓ 種子最後決定怎麼做？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="0">繼續睡覺</button><button class="quiz-opt" data-correct="0">躲得更深</button><button class="quiz-opt" data-correct="1">勇敢地往上長</button><button class="quiz-opt" data-correct="0">叫大樹幫忙</button></div></div>
+<div class="quiz-item"><div class="quiz-q">❓ 「發抖」是什麼意思？</div><div class="quiz-opts"><button class="quiz-opt" data-correct="0">很高興</button><button class="quiz-opt" data-correct="1">身體不停顫動</button><button class="quiz-opt" data-correct="0">大聲歌唱</button><button class="quiz-opt" data-correct="0">快速奔跑</button></div></div>
 
   </div>
   <script>
-    // Carousel
-    (function() {
-      const c = document.getElementById('main-carousel');
-      const imgs = c.querySelectorAll('.carousel-inner img');
-      const dots = c.querySelectorAll('.carousel-dot');
-      let cur = 0;
-      function show(n) {
-        imgs[cur].classList.remove('active'); dots[cur].classList.remove('active');
-        cur = (n + imgs.length) % imgs.length;
-        imgs[cur].classList.add('active'); dots[cur].classList.add('active');
-      }
-      c.querySelector('.prev').onclick = function() { show(cur - 1); };
-      c.querySelector('.next').onclick = function() { show(cur + 1); };
-      dots.forEach(function(d, i) { d.onclick = function() { show(i); }; });
-      imgs.forEach(function(img) {
-        img.onclick = function() {
-          document.getElementById('fs-img').src = img.src;
-          document.getElementById('fullscreen').classList.add('show');
-        };
-      });
+    (function(){
+      var c=document.getElementById('main-carousel');
+      var imgs=c.querySelectorAll('.carousel-inner img');
+      var dots=c.querySelectorAll('.carousel-dot');
+      var cur=0;
+      function show(n){imgs[cur].classList.remove('active');dots[cur].classList.remove('active');cur=(n+imgs.length)%imgs.length;imgs[cur].classList.add('active');dots[cur].classList.add('active');}
+      c.querySelector('.prev').onclick=function(){show(cur-1);};
+      c.querySelector('.next').onclick=function(){show(cur+1);};
+      dots.forEach(function(d,i){d.onclick=function(){show(i);}});
+      imgs.forEach(function(img){img.onclick=function(){document.getElementById('fs-img').src=img.src;document.getElementById('fullscreen').classList.add('show');}});
     })();
-    document.getElementById('fullscreen').onclick = function() { this.classList.remove('show'); };
-    // Quiz
-    document.querySelectorAll('.quiz-item').forEach(function(item) {
-      item.querySelectorAll('.quiz-opt').forEach(function(btn) {
-        btn.onclick = function() {
-          item.querySelectorAll('.quiz-opt').forEach(function(b) { b.classList.remove('correct','wrong'); });
-          this.classList.add(this.dataset.correct === '1' ? 'correct' : 'wrong');
-        };
+    document.getElementById('fullscreen').onclick=function(){this.classList.remove('show');};
+    document.querySelectorAll('.quiz-item').forEach(function(item){
+      item.querySelectorAll('.quiz-opt').forEach(function(btn){
+        btn.onclick=function(){item.querySelectorAll('.quiz-opt').forEach(function(b){b.classList.remove('correct','wrong');});this.classList.add(this.dataset.correct==='1'?'correct':'wrong');};
       });
     });
-    // Mode toggle
-    document.getElementById('mode-btn').onclick = function() {
-      const lbl = document.querySelector('.mode-label');
-      const teacher = lbl.textContent.includes('學生');
-      lbl.textContent = teacher ? '👨‍🏫 教師模式' : '🧑‍🎓 學生模式';
-      this.textContent = teacher ? '✏️ 切換學生模式' : '✏️ 切換教師模式';
+    document.getElementById('mode-btn').onclick=function(){
+      var lbl=document.querySelector('.mode-label');var t=lbl.textContent.includes('學生');
+      lbl.textContent=t?'👨‍🏫 教師模式':'🧑‍🎓 學生模式';
+      this.textContent=t?'✏️ 切換學生模式':'✏️ 切換教師模式';
     };
+    document.getElementById('tool-toggle').onclick=function(){document.getElementById('tool-content').classList.toggle('open');};
+    var fsize=16;
+    function setFsize(n){fsize=Math.min(28,Math.max(12,n));document.documentElement.style.setProperty('--fsize',fsize);document.getElementById('font-val').textContent=fsize+'px';}
+    document.getElementById('font-inc').onclick=function(){setFsize(fsize+2);};
+    document.getElementById('font-dec').onclick=function(){setFsize(fsize-2);};
+    var tSec=300,tRunning=false,tInterval=null;
+    var tDisp=document.getElementById('timer-disp');
+    var tStart=document.getElementById('timer-start');
+    function tFmt(s){var m=Math.floor(s/60),sc=s%60;return(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;}
+    function tTick(){if(tSec<=0){clearInterval(tInterval);tRunning=false;tDisp.textContent='00:00';tDisp.className='timer-disp ended';tStart.textContent='▶ 開始';tStart.classList.remove('on');return;}tSec--;tDisp.textContent=tFmt(tSec);}
+    tStart.onclick=function(){if(tRunning){clearInterval(tInterval);tRunning=false;tDisp.classList.remove('running');this.textContent='▶ 開始';this.classList.remove('on');}else{tInterval=setInterval(tTick,1000);tRunning=true;tDisp.className='timer-disp running';this.textContent='⏸ 暫停';this.classList.add('on');}};
+    document.getElementById('timer-reset').onclick=function(){clearInterval(tInterval);tRunning=false;tDisp.className='timer-disp';tStart.textContent='▶ 開始';tStart.classList.remove('on');tDisp.textContent=tFmt(tSec);};
+    document.querySelectorAll('.timer-preset').forEach(function(btn){btn.onclick=function(){clearInterval(tInterval);tRunning=false;tSec=parseInt(this.dataset.sec);tDisp.className='timer-disp';tDisp.textContent=tFmt(tSec);tStart.textContent='▶ 開始';tStart.classList.remove('on');}});
+    var canvas=document.getElementById('draw-canvas');
+    var ctx=canvas.getContext('2d');
+    var drawOn=false,drawing=false,dColor='#ffd54f',dSize=7;
+    function resizeCanvas(){var data=ctx.getImageData(0,0,canvas.width,canvas.height);canvas.width=window.innerWidth;canvas.height=window.innerHeight;ctx.putImageData(data,0,0);ctx.lineCap='round';ctx.lineJoin='round';}
+    resizeCanvas();window.addEventListener('resize',resizeCanvas);
+    document.getElementById('draw-toggle').onclick=function(){drawOn=!drawOn;canvas.classList.toggle('active',drawOn);this.textContent=drawOn?'✅ 關閉畫筆':'🖌️ 開啟畫筆';this.classList.toggle('on',drawOn);};
+    document.getElementById('draw-clear').onclick=function(){ctx.clearRect(0,0,canvas.width,canvas.height);};
+    document.querySelectorAll('.draw-color').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-color').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dColor=this.dataset.color;}});
+    document.querySelectorAll('.draw-size').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-size').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dSize=parseInt(this.dataset.size);}});
+    function pos(e){var r=canvas.getBoundingClientRect();if(e.touches)return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};return{x:e.clientX-r.left,y:e.clientY-r.top};}
+    canvas.addEventListener('mousedown',function(e){drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;});
+    canvas.addEventListener('mousemove',function(e){if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+    canvas.addEventListener('mouseup',function(){drawing=false;});
+    canvas.addEventListener('mouseleave',function(){drawing=false;});
+    canvas.addEventListener('touchstart',function(e){e.preventDefault();drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;},{passive:false});
+    canvas.addEventListener('touchmove',function(e){e.preventDefault();if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+    canvas.addEventListener('touchend',function(){drawing=false;});
+    // Char tooltip + speech
+    (function(){
+      var tip=document.createElement('div');
+      tip.className='zy-tooltip';
+      tip.innerHTML='<div class="zy-tip-char"></div><div class="zy-tip-zy"></div><div class="zy-tip-hint">點擊播放發音</div>';
+      document.body.appendChild(tip);
+      function moveTip(e){
+        var x=e.clientX+14,y=e.clientY-80;
+        tip.style.left=Math.min(x,window.innerWidth-100)+'px';
+        tip.style.top=Math.max(y,8)+'px';
+      }
+      document.querySelectorAll('.char-box-v').forEach(function(box){
+        box.addEventListener('mouseenter',function(e){
+          tip.querySelector('.zy-tip-char').textContent=box.dataset.char;
+          tip.querySelector('.zy-tip-zy').textContent=box.dataset.zy;
+          tip.classList.add('show');
+          moveTip(e);
+        });
+        box.addEventListener('mousemove',moveTip);
+        box.addEventListener('mouseleave',function(){tip.classList.remove('show');});
+        box.addEventListener('click',function(){
+          if('speechSynthesis' in window){
+            var u=new SpeechSynthesisUtterance(box.dataset.char);
+            u.lang='zh-TW';u.rate=0.75;
+            speechSynthesis.cancel();speechSynthesis.speak(u);
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
