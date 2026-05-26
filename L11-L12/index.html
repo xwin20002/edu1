@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>翰林版小一下 第11-12課 鉛筆和橡皮擦・上臺說故事</title>
+<style>
+:root{--bg:#1a2a1a;--chalk:#e8e4d8;--yellow:#ffd54f;--pink:#ff8a80;--blue:#81d4fa;--green:#a5d6a7;--chalk-dim:#8fa895;--wood:#8d6e4a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--chalk);font-family:'Noto Serif TC','Microsoft JhengHei',serif;min-height:100vh}
+header{background:linear-gradient(135deg,#6d4c2a,#8d6e4a,#6d4c2a);padding:18px 24px;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,.5);border-bottom:3px solid rgba(255,213,79,.4)}
+header h1{font-size:1.8em;color:var(--yellow);text-shadow:2px 2px 4px rgba(0,0,0,.6);letter-spacing:.05em}
+header .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.badge{background:rgba(255,213,79,.2);border:1px solid rgba(255,213,79,.5);border-radius:20px;padding:3px 12px;font-size:.88em;color:var(--yellow)}
+.mode-bar{background:rgba(0,0,0,.3);padding:10px 24px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.95em;border-bottom:1px solid rgba(255,255,255,.1)}
+.mode-btn{padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.3);background:transparent;color:var(--chalk);cursor:pointer;font-size:.9em;transition:all .2s}
+.mode-btn.active{background:rgba(255,213,79,.2);border-color:var(--yellow);color:var(--yellow)}
+.container{max-width:1280px;margin:0 auto;padding:24px 20px}
+.nav-pills{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.nav-pill{padding:8px 20px;border-radius:25px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--chalk);cursor:pointer;text-decoration:none;font-size:.9em;transition:all .2s}
+.nav-pill:hover,.nav-pill.active{background:rgba(255,213,79,.2);border-color:var(--yellow);color:var(--yellow)}
+.lesson-section{margin-bottom:48px}
+.section-title{font-size:1.3em;color:var(--yellow);margin:24px 0 14px;display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px dashed rgba(255,213,79,.3)}
+.section-title span{font-size:1.1em}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:20px;margin-bottom:18px}
+/* Vertical text */
+.vertical-text-container{background:rgba(0,0,0,.2);border-radius:8px;padding:12px;border:1px solid rgba(255,213,79,.3);margin-bottom:18px}
+.vertical-text{writing-mode:vertical-rl;width:100%;min-height:180px;max-height:320px;overflow-x:auto;overflow-y:hidden;padding:8px 12px;line-height:2.4;font-size:20px;color:#e8f5ea;letter-spacing:.05em}
+.vchar{cursor:pointer;position:relative;transition:color .15s}
+.vchar:hover,.vchar.lit{color:var(--yellow)}
+.vchar .inline-zy{position:absolute;right:-1.3em;font-size:.5em;color:#a8d4b8;display:none;white-space:nowrap}
+.vchar:hover .inline-zy,.show-all-zy .vchar .inline-zy{display:block}
+.vpunct{cursor:default}
+.vspace{opacity:0}
+.vline-break{display:block;width:0;height:1em}
+.toggle-zy-btn{display:inline-block;margin-top:10px;padding:6px 16px;border-radius:20px;background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.4);color:var(--yellow);cursor:pointer;font-size:.82em}
+.vertical-hint{font-size:.72em;color:var(--chalk-dim);margin-top:6px;text-align:center}
+/* Char grid */
+.char-grid-v{display:flex;flex-direction:row-reverse;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-bottom:8px}
+.char-box-v{display:inline-flex;align-items:center;gap:5px;background:rgba(255,213,79,.1);border:2px solid rgba(255,213,79,.4);border-radius:10px;padding:8px 10px;cursor:pointer;transition:background .15s}
+.char-box-v:hover{background:rgba(255,213,79,.25)}
+.char-main{font-size:1.7em;font-weight:700;color:var(--yellow);line-height:1}
+.zy-col{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
+.zy-col>span{font-size:.62em;color:#9abcaa;white-space:nowrap;display:block}
+.zy-row{display:flex!important;align-items:baseline;gap:1px}
+.zy-tone{font-size:.82em;color:#b8d4c4;vertical-align:super;line-height:1}
+.recog-label{font-size:.78em;color:var(--chalk-dim);margin:14px 0 6px}
+/* Tooltip */
+.zy-tooltip{position:fixed;background:#1a2a1a;border:1.5px solid var(--yellow);border-radius:10px;padding:10px 14px;z-index:500;pointer-events:none;display:none;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.6);min-width:70px}
+.zy-tooltip.show{display:block}
+.zy-tip-char{font-size:2.4em;font-weight:700;color:var(--yellow);line-height:1.1}
+.zy-tip-zy{font-size:.95em;color:#9abcaa;margin-top:4px;letter-spacing:2px}
+.zy-tip-hint{font-size:.65em;color:var(--chalk-dim);margin-top:5px}
+/* Carousel */
+.carousel{border-radius:10px;overflow:hidden;background:#000;margin-bottom:16px;border:1px solid rgba(255,255,255,.1)}
+.carousel-inner{position:relative;width:100%}
+.carousel-inner img{width:100%;display:none;aspect-ratio:16/9;object-fit:contain}
+.carousel-inner img.active{display:block}
+.carousel-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:10px;background:rgba(0,0,0,.3)}
+.car-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:var(--chalk);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1.2em;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.car-btn:hover{background:rgba(255,213,79,.2)}
+.car-idx{font-size:.85em;color:var(--chalk-dim)}
+/* Infographics */
+.infographic-img{width:100%;border-radius:10px;cursor:zoom-in;border:1px solid rgba(255,255,255,.1);display:block;margin-bottom:12px}
+.infographic-img.portrait{max-width:360px;aspect-ratio:9/16;object-fit:contain}
+/* Quiz */
+.quiz-section{margin-top:24px}
+.quiz-title{font-size:1.05em;color:var(--blue);margin-bottom:14px;font-weight:600}
+.fill-blank{background:rgba(255,255,255,.05);border-radius:10px;padding:16px;margin-bottom:12px;border:1px solid rgba(129,212,250,.2)}
+.blank-sentence{font-size:1.1em;line-height:2;margin-bottom:10px}
+.blank-slot{display:inline-block;min-width:60px;border-bottom:2px solid var(--blue);text-align:center;padding:0 6px;color:var(--yellow);font-weight:700;transition:all .3s}
+.blank-options{display:flex;flex-wrap:wrap;gap:8px}
+.blank-options button{padding:6px 16px;border-radius:20px;border:1px solid rgba(129,212,250,.4);background:transparent;color:var(--chalk);cursor:pointer;font-size:.9em;transition:all .2s}
+.blank-options button:hover{background:rgba(129,212,250,.15)}
+.blank-options button.correct{background:rgba(100,200,100,.25);border-color:#a5d6a7;color:#a5d6a7}
+.blank-options button.wrong{background:rgba(255,100,100,.15);border-color:#ff8a80;color:#ff8a80}
+.tf-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,255,255,.05);border-radius:10px;margin-bottom:10px;border:1px solid rgba(255,255,255,.08);gap:12px;flex-wrap:wrap}
+.tf-text{flex:1;font-size:1em;line-height:1.6}
+.tf-buttons{display:flex;gap:8px}
+.tf-btn{padding:6px 20px;border-radius:20px;border:none;font-size:1.1em;font-weight:700;cursor:pointer;transition:all .2s}
+.tf-o{background:rgba(100,200,100,.2);color:#a5d6a7;border:1px solid #a5d6a7}
+.tf-x{background:rgba(255,100,100,.15);color:#ff8a80;border:1px solid #ff8a80}
+.tf-btn.correct{transform:scale(1.15);box-shadow:0 0 10px rgba(165,214,167,.5)}
+.tf-btn.wrong{opacity:.4}
+.quiz-item{background:rgba(255,255,255,.05);border-radius:10px;padding:16px;margin-bottom:12px;border:1px solid rgba(255,255,255,.08)}
+.quiz-q{font-size:1em;margin-bottom:10px;color:var(--yellow);line-height:1.6}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quiz-opts button{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:transparent;color:var(--chalk);cursor:pointer;font-size:.9em;text-align:left;transition:all .2s;line-height:1.4}
+.quiz-opts button:hover{background:rgba(255,255,255,.1)}
+.quiz-opts button.correct{background:rgba(100,200,100,.25);border-color:#a5d6a7;color:#a5d6a7}
+.quiz-opts button.wrong{background:rgba(255,100,100,.1);border-color:#ff8a80;color:#ff8a80;opacity:.6}
+/* Fullscreen overlay */
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:1000;cursor:zoom-out;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.overlay img{max-width:95vw;max-height:95vh;border-radius:8px;object-fit:contain}
+/* Floating tools */
+.float-tools{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:200}
+.float-btn{width:44px;height:44px;border-radius:50%;background:rgba(30,50,30,.9);border:1px solid rgba(255,213,79,.4);color:var(--yellow);cursor:pointer;font-size:1.2em;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.float-btn:hover{background:rgba(255,213,79,.2);transform:scale(1.1)}
+.float-panel{display:none;position:fixed;right:70px;background:rgba(20,35,20,.97);border:1px solid rgba(255,213,79,.4);border-radius:12px;padding:14px;min-width:180px;z-index:201;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+.float-panel.open{display:block}
+.float-panel h4{color:var(--yellow);margin-bottom:10px;font-size:.9em}
+/* Teacher extras */
+.teacher-only{display:none;background:rgba(255,213,79,.05);border:1px dashed rgba(255,213,79,.3);border-radius:10px;padding:16px;margin-top:16px}
+.teacher-only h4{color:var(--yellow);margin-bottom:8px}
+body.teacher-mode .teacher-only{display:block}
+/* Responsive */
+@media(max-width:768px){
+  header h1{font-size:1.3em}
+  .quiz-opts{grid-template-columns:1fr}
+  .vertical-text{font-size:18px}
+  .char-main{font-size:1.4em}
+}
+</style>
+</head>
+<body>
+
+<div class="zy-tooltip" id="zy-tip">
+  <div class="zy-tip-char"></div>
+  <div class="zy-tip-zy"></div>
+  <div class="zy-tip-hint">點擊播放發音</div>
+</div>
+<div class="overlay" id="img-overlay" onclick="this.classList.remove('open')">
+  <img id="overlay-img" src="" alt="">
+</div>
+
+<header>
+  <h1>🖊️ 翰林版小一下 第11-12課</h1>
+  <div class="meta">
+    <span class="badge">鉛筆和橡皮擦</span>
+    <span class="badge">上臺說故事</span>
+    <span class="badge">114學年度下學期</span>
+    <span class="badge">翰林版</span>
+  </div>
+</header>
+
+<div class="mode-bar">
+  <span style="color:var(--chalk-dim);font-size:.85em">模式：</span>
+  <button class="mode-btn active" id="btn-student" onclick="setMode('student')">🎒 學生模式</button>
+  <button class="mode-btn" id="btn-teacher" onclick="setMode('teacher')">📋 教師模式</button>
+</div>
+
+<div class="container">
+
+  <!-- 學習目標 -->
+  <div style="margin-bottom:24px">
+    <div class="section-title"><span>🎯</span> 學習目標</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px">
+      <span class="nav-pill">認識習寫字 29 個</span>
+      <span class="nav-pill">理解兩篇課文主旨</span>
+      <span class="nav-pill">練習鼓勵句型</span>
+      <span class="nav-pill">感受合作精神</span>
+    </div>
+  </div>
+
+  <!-- 課程導覽 -->
+  <div class="nav-pills">
+    <a class="nav-pill active" href="#lesson-11">📖 第11課 鉛筆和橡皮擦</a>
+    <a class="nav-pill" href="#lesson-12">📖 第12課 上臺說故事</a>
+  </div>
+
+  <!-- 開場簡報 -->
+  <div class="section-title"><span>📊</span> 本單元授課簡報</div><div class="carousel" id="car-all">
+  <div class="carousel-inner"><img src="assets/slide_01.jpg" class="carousel-img active" loading="lazy" alt="slide 1">
+<img src="assets/slide_02.jpg" class="carousel-img" loading="lazy" alt="slide 2">
+<img src="assets/slide_03.jpg" class="carousel-img" loading="lazy" alt="slide 3">
+<img src="assets/slide_04.jpg" class="carousel-img" loading="lazy" alt="slide 4">
+<img src="assets/slide_05.jpg" class="carousel-img" loading="lazy" alt="slide 5">
+<img src="assets/slide_06.jpg" class="carousel-img" loading="lazy" alt="slide 6">
+<img src="assets/slide_07.jpg" class="carousel-img" loading="lazy" alt="slide 7">
+<img src="assets/slide_08.jpg" class="carousel-img" loading="lazy" alt="slide 8">
+<img src="assets/slide_09.jpg" class="carousel-img" loading="lazy" alt="slide 9">
+<img src="assets/slide_10.jpg" class="carousel-img" loading="lazy" alt="slide 10">
+<img src="assets/slide_11.jpg" class="carousel-img" loading="lazy" alt="slide 11">
+<img src="assets/slide_12.jpg" class="carousel-img" loading="lazy" alt="slide 12">
+<img src="assets/slide_13.jpg" class="carousel-img" loading="lazy" alt="slide 13">
+<img src="assets/slide_14.jpg" class="carousel-img" loading="lazy" alt="slide 14">
+<img src="assets/slide_15.jpg" class="carousel-img" loading="lazy" alt="slide 15"></div>
+  <div class="carousel-controls">
+    <button class="car-btn" onclick="carGo('car-all',-1)">&#8249;</button>
+    <span class="car-idx" id="car-all-idx">1 / 15</span>
+    <button class="car-btn" onclick="carGo('car-all',1)">&#8250;</button>
+  </div>
+</div>
+
+  <!-- ════════════════ L11 ════════════════ -->
+  <div class="lesson-section" id="lesson-11">
+    <div style="background:rgba(255,213,79,.07);border:1px solid rgba(255,213,79,.3);border-radius:14px;padding:18px;margin-bottom:24px">
+      <h2 style="font-size:1.5em;color:var(--yellow);margin-bottom:6px">第11課 鉛筆和橡皮擦</h2>
+      <p style="color:var(--chalk-dim);font-size:.9em">記敘文（擬人對話體）｜主旨：朋友互相幫助、不怕失敗、勇於嘗試</p>
+    </div>
+
+    <div class="section-title"><span>📖</span> 課文朗讀（點字聽發音）</div>
+    <div class="vertical-text-container">
+      <div class="vertical-text" id="vt-11"><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄑㄧㄢ">鉛</span><span class="vchar" data-zy="ㄅㄧˇ">筆</span><span class="vchar" data-zy="ㄒㄧㄝˇ">寫</span><span class="vchar" data-zy="ㄘㄨㄛˋ">錯</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="">個</span><span class="vchar" data-zy="ㄗˋ">字</span><span class="vpunct">，</span><span class="vchar" data-zy="">難</span><span class="vchar" data-zy="">過</span><span class="vchar" data-zy="">地</span><span class="vchar" data-zy="ㄎㄨ">哭</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄑㄧˇ">起</span><span class="vchar" data-zy="ㄌㄞˊ">來</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄒㄧㄤˋ">橡</span><span class="vchar" data-zy="ㄆㄧˊ">皮</span><span class="vchar" data-zy="ㄘㄚ">擦</span><span class="vchar" data-zy="">走</span><span class="vchar" data-zy="">過</span><span class="vchar" data-zy="ㄌㄞˊ">來</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄅㄧㄝˊ">別</span><span class="vchar" data-zy="ㄎㄨ">哭</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="ㄅㄤ">幫</span><span class="vchar" data-zy="ㄋㄧˇ">你</span><span class="vchar" data-zy="ㄘㄚ">擦</span><span class="vchar" data-zy="">掉</span><span class="vpunct">。</span><span class="vchar" data-zy="ㄗㄞˋ">再</span><span class="vchar" data-zy="ㄕˋ">試</span><span class="vchar" data-zy="ㄕˋ">試</span><span class="vchar" data-zy="">看</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄑㄧㄢ">鉛</span><span class="vchar" data-zy="ㄅㄧˇ">筆</span><span class="vchar" data-zy="ㄖㄣˋ">認</span><span class="vchar" data-zy="ㄓㄣ">真</span><span class="vchar" data-zy="">地</span><span class="vchar" data-zy="ㄒㄧㄝˇ">寫</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄘˋ">次</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄓㄜˋ">這</span><span class="vchar" data-zy="ㄘˋ">次</span><span class="vchar" data-zy="ㄓㄨㄥ">終</span><span class="vchar" data-zy="">於</span><span class="vchar" data-zy="ㄒㄧㄝˇ">寫</span><span class="vchar" data-zy="ㄓㄥˋ">正</span><span class="vchar" data-zy="ㄑㄩㄝˋ">確</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄋㄧˇ">你</span><span class="vchar" data-zy="ㄐㄧㄣˋ">進</span><span class="vchar" data-zy="ㄅㄨˋ">步</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vpunct">！</span><span class="vchar" data-zy="ㄐㄧㄚ">加</span><span class="vchar" data-zy="ㄧㄡˊ">油</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vchar" data-zy="ㄒㄧㄤˋ">橡</span><span class="vchar" data-zy="ㄆㄧˊ">皮</span><span class="vchar" data-zy="ㄘㄚ">擦</span><span class="vchar" data-zy="ㄨㄟˊ">為</span><span class="vchar" data-zy="ㄑㄧㄢ">鉛</span><span class="vchar" data-zy="ㄅㄧˇ">筆</span><span class="vchar" data-zy="">鼓</span><span class="vchar" data-zy="">掌</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄑㄧㄢ">鉛</span><span class="vchar" data-zy="ㄅㄧˇ">筆</span><span class="vchar" data-zy="ㄒㄧㄠˋ">笑</span><span class="vchar" data-zy="">著</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄧㄡˇ">有</span><span class="vchar" data-zy="ㄋㄧˇ">你</span><span class="vchar" data-zy="ㄓㄜˋ">這</span><span class="vchar" data-zy="">個</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄆㄥˊ">朋</span><span class="vchar" data-zy="ㄧㄡˇ">友</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="ㄘㄞˊ">才</span><span class="vchar" data-zy="">能</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="">直</span><span class="vchar" data-zy="ㄐㄧㄣˋ">進</span><span class="vchar" data-zy="ㄅㄨˋ">步</span><span class="vpunct">。</span><span class="vpunct">」</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄒㄧㄤˋ">橡</span><span class="vchar" data-zy="ㄆㄧˊ">皮</span><span class="vchar" data-zy="ㄘㄚ">擦</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄋㄧˇ">你</span><span class="vchar" data-zy="ㄌㄧㄢˋ">練</span><span class="vchar" data-zy="ㄒㄧˊ">習</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄐㄧㄡˇ">久</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄘㄞˊ">才</span><span class="vchar" data-zy="ㄒㄩㄝˊ">學</span><span class="vchar" data-zy="">會</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄋㄧˇ">你</span><span class="vchar" data-zy="ㄓㄣ">真</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄏㄣˇ">很</span><span class="vchar" data-zy="ㄩㄥˋ">用</span><span class="vchar" data-zy="ㄒㄧㄣ">心</span><span class="vpunct">。</span><span class="vpunct">」</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄑㄧㄢ">鉛</span><span class="vchar" data-zy="ㄅㄧˇ">筆</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="">還</span><span class="vchar" data-zy="">想</span><span class="vchar" data-zy="ㄒㄩㄝˊ">學</span><span class="vchar" data-zy="ㄏㄨㄚˋ">畫</span><span class="vchar" data-zy="ㄏㄨㄚˋ">畫</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄧˇ">以</span><span class="vchar" data-zy="ㄏㄡˋ">後</span><span class="vchar" data-zy="ㄒㄩ">需</span><span class="vchar" data-zy="ㄧㄠˋ">要</span><span class="vchar" data-zy="ㄋㄧˇ">你</span><span class="vchar" data-zy="ㄅㄤ">幫</span><span class="vchar" data-zy="ㄇㄤˊ">忙</span><span class="vpunct">。</span><span class="vpunct">」</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄒㄧㄤˋ">橡</span><span class="vchar" data-zy="ㄆㄧˊ">皮</span><span class="vchar" data-zy="ㄘㄚ">擦</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="">啊</span><span class="vpunct">！</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="">們</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄑㄧˇ">起</span><span class="vchar" data-zy="ㄒㄩㄝˊ">學</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄑㄧˇ">起</span><span class="vchar" data-zy="ㄐㄧㄣˋ">進</span><span class="vchar" data-zy="ㄅㄨˋ">步</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="">從</span><span class="vchar" data-zy="">此</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄑㄧㄢ">鉛</span><span class="vchar" data-zy="ㄅㄧˇ">筆</span><span class="vchar" data-zy="ㄏㄜˊ">和</span><span class="vchar" data-zy="ㄒㄧㄤˋ">橡</span><span class="vchar" data-zy="ㄆㄧˊ">皮</span><span class="vchar" data-zy="ㄘㄚ">擦</span><span class="vchar" data-zy="ㄇㄟˇ">每</span><span class="vchar" data-zy="ㄊㄧㄢ">天</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄑㄧˇ">起</span><span class="vchar" data-zy="ㄋ㣷ˇ">努</span><span class="vchar" data-zy="ㄌㄧˋ">力</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄔㄥˊ">成</span><span class="vchar" data-zy="ㄨㄟˊ">為</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄗㄨㄟˋ">最</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄆㄥˊ">朋</span><span class="vchar" data-zy="ㄧㄡˇ">友</span><span class="vpunct">。</span><span class="vline-break"></span></div>
+      <div class="vertical-hint">← 由右往左閱讀・可左右滑動 →</div>
+      <button class="toggle-zy-btn" onclick="toggleAllZY('vt-11')">顯示 / 隱藏全部注音</button>
+    </div>
+
+    <div class="section-title"><span>📊</span> 第11課簡報</div>
+    <div class="carousel" id="car-L11">
+  <div class="carousel-inner"><img src="assets/slide_01.jpg" class="carousel-img active" loading="lazy" alt="slide 1">
+<img src="assets/slide_02.jpg" class="carousel-img" loading="lazy" alt="slide 2">
+<img src="assets/slide_03.jpg" class="carousel-img" loading="lazy" alt="slide 3">
+<img src="assets/slide_04.jpg" class="carousel-img" loading="lazy" alt="slide 4">
+<img src="assets/slide_05.jpg" class="carousel-img" loading="lazy" alt="slide 5">
+<img src="assets/slide_06.jpg" class="carousel-img" loading="lazy" alt="slide 6">
+<img src="assets/slide_07.jpg" class="carousel-img" loading="lazy" alt="slide 7"></div>
+  <div class="carousel-controls">
+    <button class="car-btn" onclick="carGo('car-L11',-1)">&#8249;</button>
+    <span class="car-idx" id="car-L11-idx">1 / 7</span>
+    <button class="car-btn" onclick="carGo('car-L11',1)">&#8250;</button>
+  </div>
+</div>
+
+    <div class="section-title"><span>✏️</span> 習寫字（點擊聽發音）</div>
+    <div class="card">
+      <div class="char-grid-v"><div class="char-box-v" data-char="鉛" data-zy="ㄑㄧㄢ"><span class="char-main">鉛</span><div class="zy-col"><span>ㄑ</span><span>ㄧ</span><span>ㄢ</span></div></div>
+<div class="char-box-v" data-char="橡" data-zy="ㄒㄧㄤˋ"><span class="char-main">橡</span><div class="zy-col"><span>ㄒ</span><span>ㄧ</span><span class="zy-row">ㄤ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="皮" data-zy="ㄆㄧˊ"><span class="char-main">皮</span><div class="zy-col"><span>ㄆ</span><span class="zy-row">ㄧ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="擦" data-zy="ㄘㄚ"><span class="char-main">擦</span><div class="zy-col"><span>ㄘ</span><span>ㄚ</span></div></div>
+<div class="char-box-v" data-char="常" data-zy="ㄔㄤˊ"><span class="char-main">常</span><div class="zy-col"><span>ㄔ</span><span class="zy-row">ㄤ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="錯" data-zy="ㄘㄨㄛˋ"><span class="char-main">錯</span><div class="zy-col"><span>ㄘ</span><span>ㄨ</span><span class="zy-row">ㄛ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="久" data-zy="ㄐㄧㄡˇ"><span class="char-main">久</span><div class="zy-col"><span>ㄐ</span><span>ㄧ</span><span class="zy-row">ㄡ<span class="zy-tone">ˇ</span></span></div></div>
+<div class="char-box-v" data-char="哭" data-zy="ㄎㄨ"><span class="char-main">哭</span><div class="zy-col"><span>ㄎ</span><span>ㄨ</span></div></div>
+<div class="char-box-v" data-char="試" data-zy="ㄕˋ"><span class="char-main">試</span><div class="zy-col"><span class="zy-row">ㄕ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="後" data-zy="ㄏㄡˋ"><span class="char-main">後</span><div class="zy-col"><span>ㄏ</span><span class="zy-row">ㄡ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="正" data-zy="ㄓㄥˋ"><span class="char-main">正</span><div class="zy-col"><span>ㄓ</span><span class="zy-row">ㄥ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="確" data-zy="ㄑㄩㄝˋ"><span class="char-main">確</span><div class="zy-col"><span>ㄑ</span><span>ㄩ</span><span class="zy-row">ㄝ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="進" data-zy="ㄐㄧㄣˋ"><span class="char-main">進</span><div class="zy-col"><span>ㄐ</span><span>ㄧ</span><span class="zy-row">ㄣ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="步" data-zy="ㄅㄨˋ"><span class="char-main">步</span><div class="zy-col"><span>ㄅ</span><span class="zy-row">ㄨ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="學" data-zy="ㄒㄩㄝˊ"><span class="char-main">學</span><div class="zy-col"><span>ㄒ</span><span>ㄩ</span><span class="zy-row">ㄝ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="需" data-zy="ㄒㄩ"><span class="char-main">需</span><div class="zy-col"><span>ㄒ</span><span>ㄩ</span></div></div></div>
+      <div class="recog-label">🔍 認讀字</div>
+      <div class="char-grid-v"><div class="char-box-v" data-char="筆" data-zy="ㄅㄧˇ"><span class="char-main">筆</span><div class="zy-col"><span>ㄅ</span><span class="zy-row">ㄧ<span class="zy-tone">ˇ</span></span></div></div>
+<div class="char-box-v" data-char="終" data-zy="ㄓㄨㄥ"><span class="char-main">終</span><div class="zy-col"><span>ㄓ</span><span>ㄨ</span><span>ㄥ</span></div></div></div>
+    </div>
+
+    <div class="section-title"><span>🖼️</span> 課文生字卡</div>
+    <div class="card">
+      <img src="assets/chars_L11.jpg" class="infographic-img" loading="lazy" alt="L11生字卡"
+           onclick="openOverlay(this.src)">
+    </div>
+
+    <div class="section-title"><span>🗺️</span> 課文故事地圖</div>
+    <div class="card" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+      <img src="assets/theme_L11.jpg" class="infographic-img" loading="lazy" alt="L11故事地圖"
+           style="flex:1;min-width:260px" onclick="openOverlay(this.src)">
+      <img src="assets/text_L11.jpg" class="infographic-img portrait" loading="lazy" alt="L11課文直式"
+           onclick="openOverlay(this.src)">
+    </div>
+
+    <!-- 重點句型 -->
+    <div class="section-title"><span>💬</span> 重點句型</div>
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.1)">
+          <td style="padding:10px;color:var(--yellow);font-weight:600;width:40%">「再試試看！」</td>
+          <td style="padding:10px;color:var(--chalk-dim)">鼓勵語氣，表示還有機會</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.1)">
+          <td style="padding:10px;color:var(--yellow);font-weight:600">「有你這個好朋友，我才能～。」</td>
+          <td style="padding:10px;color:var(--chalk-dim)">感謝朋友的句型</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;color:var(--yellow);font-weight:600">「你進步了！加油！」</td>
+          <td style="padding:10px;color:var(--chalk-dim)">稱讚鼓勵句型</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Quiz L11 -->
+    <div class="section-title"><span>✅</span> 形成性評量</div>
+    <div class="quiz-section">
+      <div class="quiz-title">一、選詞填空</div>
+
+      <div class="fill-blank">
+        <div class="blank-sentence">鉛筆寫錯了，橡皮擦說：「別<span class="blank-slot" id="b1">　　</span>，我幫你擦掉。再試試看！」</div>
+        <div class="blank-options">
+          <button onclick="fillBlank('b1',this,true)">哭</button>
+          <button onclick="fillBlank('b1',this,false)">笑</button>
+          <button onclick="fillBlank('b1',this,false)">睡</button>
+        </div>
+      </div>
+
+      <div class="fill-blank">
+        <div class="blank-sentence">鉛筆認真地寫了一次，這次終於寫<span class="blank-slot" id="b2">　　</span>了。</div>
+        <div class="blank-options">
+          <button onclick="fillBlank('b2',this,true)">正確</button>
+          <button onclick="fillBlank('b2',this,false)">進步</button>
+          <button onclick="fillBlank('b2',this,false)">需要</button>
+        </div>
+      </div>
+
+      <div class="quiz-title" style="margin-top:16px">二、是非題</div>
+      <div class="tf-item">
+        <span class="tf-text">橡皮擦看到鉛筆哭，大聲責罵它。</span>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-o" onclick="checkTF(this,false)">O</button>
+          <button class="tf-btn tf-x" onclick="checkTF(this,true)">X</button>
+        </div>
+      </div>
+      <div class="tf-item">
+        <span class="tf-text">橡皮擦說「你真的很用心」，是在鼓勵鉛筆。</span>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-o" onclick="checkTF(this,true)">O</button>
+          <button class="tf-btn tf-x" onclick="checkTF(this,false)">X</button>
+        </div>
+      </div>
+      <div class="tf-item">
+        <span class="tf-text">鉛筆說以後不需要橡皮擦幫忙了。</span>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-o" onclick="checkTF(this,false)">O</button>
+          <button class="tf-btn tf-x" onclick="checkTF(this,true)">X</button>
+        </div>
+      </div>
+
+      <div class="quiz-title" style="margin-top:16px">三、選擇題</div>
+      <div class="quiz-item">
+        <div class="quiz-q">Q1. 鉛筆寫錯字時，心情怎麼樣？</div>
+        <div class="quiz-opts">
+          <button onclick="checkQuiz(this,false)">A. 很高興</button>
+          <button onclick="checkQuiz(this,true)">B. 難過</button>
+          <button onclick="checkQuiz(this,false)">C. 生氣</button>
+          <button onclick="checkQuiz(this,false)">D. 害怕</button>
+        </div>
+      </div>
+      <div class="quiz-item">
+        <div class="quiz-q">Q2. 「再試試看！」是什麼語氣？</div>
+        <div class="quiz-opts">
+          <button onclick="checkQuiz(this,false)">A. 生氣</button>
+          <button onclick="checkQuiz(this,false)">B. 害怕</button>
+          <button onclick="checkQuiz(this,true)">C. 鼓勵</button>
+          <button onclick="checkQuiz(this,false)">D. 傷心</button>
+        </div>
+      </div>
+      <div class="quiz-item">
+        <div class="quiz-q">Q3. 鉛筆和橡皮擦最後成為了什麼？</div>
+        <div class="quiz-opts">
+          <button onclick="checkQuiz(this,false)">A. 敵人</button>
+          <button onclick="checkQuiz(this,false)">B. 陌生人</button>
+          <button onclick="checkQuiz(this,true)">C. 最好的朋友</button>
+          <button onclick="checkQuiz(this,false)">D. 普通同學</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only">
+      <h4>📋 教師提示 — 第11課</h4>
+      <ul style="color:var(--chalk-dim);font-size:.9em;line-height:2;padding-left:16px">
+        <li>帶入生活情境：你有沒有遇過像橡皮擦這樣的好朋友？</li>
+        <li>討論：失敗了怎麼辦？你會怎麼鼓勵自己和別人？</li>
+        <li>注意：「需」字讀ㄒㄩ（一聲），不要讀成ㄒㄩˋ</li>
+        <li>「確」字右上方是「隺」，注意筆順</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════ L12 ════════════════ -->
+  <div class="lesson-section" id="lesson-12">
+    <div style="background:rgba(129,212,250,.07);border:1px solid rgba(129,212,250,.3);border-radius:14px;padding:18px;margin-bottom:24px">
+      <h2 style="font-size:1.5em;color:var(--blue);margin-bottom:6px">第12課 上臺說故事</h2>
+      <p style="color:var(--chalk-dim);font-size:.9em">記敘文｜主旨：合作、勇敢嘗試、克服緊張</p>
+    </div>
+
+    <div class="section-title"><span>📖</span> 課文朗讀（點字聽發音）</div>
+    <div class="vertical-text-container">
+      <div class="vertical-text" id="vt-12"><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="">們</span><span class="vchar" data-zy="ㄧㄠˋ">要</span><span class="vchar" data-zy="ㄕㄤˋ">上</span><span class="vchar" data-zy="ㄊㄞˊ">臺</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vchar" data-zy="ㄍㄨˋ">故</span><span class="vchar" data-zy="ㄕˋ">事</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vchar" data-zy="ㄌㄠˇ">老</span><span class="vchar" data-zy="ㄕ">師</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄕㄤˋ">上</span><span class="vchar" data-zy="ㄊㄞˊ">臺</span><span class="vpunct">？</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄐㄧㄣˇ">緊</span><span class="vchar" data-zy="ㄓㄤ">張</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄊㄨㄥˊ">同</span><span class="vchar" data-zy="ㄒㄩㄝˊ">學</span><span class="vchar" data-zy="">們</span><span class="vchar" data-zy="ㄕㄤ">商</span><span class="vchar" data-zy="ㄌㄧㄤˋ">量</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄐㄧㄡˇ">久</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄐㄩㄝˊ">決</span><span class="vchar" data-zy="ㄉㄧㄥˋ">定</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vchar" data-zy="ㄙㄢ">三</span><span class="vchar" data-zy="ㄓ">隻</span><span class="vchar" data-zy="ㄒㄧㄠˇ">小</span><span class="vchar" data-zy="ㄓㄨ">豬</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄍㄨˋ">故</span><span class="vchar" data-zy="ㄕˋ">事</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="">家</span><span class="vchar" data-zy="ㄈㄣ">分</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄉㄨㄥˋ">動</span><span class="vchar" data-zy="ㄨˋ">物</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄐㄩㄝˊ">角</span><span class="vchar" data-zy="ㄙㄜˋ">色</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="ㄧㄢˇ">演</span><span class="vchar" data-zy="ㄒㄧㄠˇ">小</span><span class="vchar" data-zy="ㄓㄨ">豬</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄌㄧㄤˋ">亮</span><span class="vchar" data-zy="ㄌㄧㄤˋ">亮</span><span class="vchar" data-zy="ㄧㄢˇ">演</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="ㄧㄝˇ">野</span><span class="vchar" data-zy="ㄌㄤˊ">狼</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄉㄨㄢˋ">段</span><span class="vchar" data-zy="ㄕˊ">時</span><span class="vchar" data-zy="ㄐㄧㄢ">間</span><span class="vchar" data-zy="">過</span><span class="vchar" data-zy="ㄑㄩˋ">去</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="">們</span><span class="vchar" data-zy="ㄌㄧㄢˋ">練</span><span class="vchar" data-zy="ㄒㄧˊ">習</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vchar" data-zy="ㄏㄣˇ">很</span><span class="vchar" data-zy="">多</span><span class="vchar" data-zy="ㄘˋ">次</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄆㄞ">拍</span><span class="vchar" data-zy="">手</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄕˊ">時</span><span class="vchar" data-zy="ㄐㄧㄢ">間</span><span class="vchar" data-zy="">到</span><span class="vchar" data-zy="ㄌㄜ˙">了</span><span class="vpunct">！</span><span class="vchar" data-zy="">千</span><span class="vchar" data-zy="">千</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vchar" data-zy="ㄍㄨˋ">故</span><span class="vchar" data-zy="ㄕˋ">事</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄕㄥ">聲</span><span class="vchar" data-zy="ㄧㄣ">音</span><span class="vchar" data-zy="ㄧㄡˋ">又</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="ㄧㄡˋ">又</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="">聽</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄌㄧㄤˋ">亮</span><span class="vchar" data-zy="ㄌㄧㄤˋ">亮</span><span class="vchar" data-zy="ㄧㄢˇ">演</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="ㄧㄝˇ">野</span><span class="vchar" data-zy="ㄌㄤˊ">狼</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄅㄚˇ">把</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="">家</span><span class="vchar" data-zy="ㄒㄧㄚˋ">嚇</span><span class="vchar" data-zy="">得</span><span class="vchar" data-zy="ㄏㄚ">哈</span><span class="vchar" data-zy="ㄏㄚ">哈</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="ㄒㄧㄠˋ">笑</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="ㄧㄢˇ">演</span><span class="vchar" data-zy="ㄒㄧㄠˇ">小</span><span class="vchar" data-zy="ㄓㄨ">豬</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄋ㣷ˇ">努</span><span class="vchar" data-zy="ㄌㄧˋ">力</span><span class="vchar" data-zy="">地</span><span class="vchar" data-zy="ㄅㄚˇ">把</span><span class="vchar" data-zy="ㄍㄨˋ">故</span><span class="vchar" data-zy="ㄕˋ">事</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vchar" data-zy="">完</span><span class="vpunct">。</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="">台</span><span class="vchar" data-zy="ㄒㄧㄚˋ">下</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄊㄨㄥˊ">同</span><span class="vchar" data-zy="ㄒㄩㄝˊ">學</span><span class="vchar" data-zy="">們</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄑㄧˇ">起</span><span class="vchar" data-zy="ㄆㄞ">拍</span><span class="vchar" data-zy="">手</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄉㄚˋ">大</span><span class="vchar" data-zy="ㄕㄥ">聲</span><span class="vchar" data-zy="ㄏㄢˇ">喊</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄅㄤˋ">棒</span><span class="vpunct">！</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄅㄤˋ">棒</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vline-break"></span><span class="vspace"> 　</span><span class="vspace"> 　</span><span class="vchar" data-zy="ㄨㄛˇ">我</span><span class="vchar" data-zy="ㄒㄧㄣ">心</span><span class="vchar" data-zy="">裡</span><span class="vchar" data-zy="">想</span><span class="vpunct">：</span><span class="vpunct">「</span><span class="vchar" data-zy="ㄩㄢˊ">原</span><span class="vchar" data-zy="ㄌㄞˊ">來</span><span class="vchar" data-zy="ㄕㄤˋ">上</span><span class="vchar" data-zy="ㄊㄞˊ">臺</span><span class="vchar" data-zy="ㄕㄨㄛ">說</span><span class="vchar" data-zy="ㄍㄨˋ">故</span><span class="vchar" data-zy="ㄕˋ">事</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄧ">一</span><span class="vchar" data-zy="ㄉㄧㄢˇ">點</span><span class="vchar" data-zy="ㄧㄝˇ">也</span><span class="vchar" data-zy="ㄅㄨˋ">不</span><span class="vchar" data-zy="ㄎㄜˇ">可</span><span class="vchar" data-zy="ㄆㄚˋ">怕</span><span class="vpunct">，</span><span class="vchar" data-zy="ㄓㄣ">真</span><span class="vchar" data-zy="ㄉㄜ˙">的</span><span class="vchar" data-zy="ㄏㄣˇ">很</span><span class="vchar" data-zy="ㄏㄠˇ">好</span><span class="vchar" data-zy="ㄨㄢˊ">玩</span><span class="vpunct">！</span><span class="vpunct">」</span><span class="vline-break"></span></div>
+      <div class="vertical-hint">← 由右往左閱讀・可左右滑動 →</div>
+      <button class="toggle-zy-btn" onclick="toggleAllZY('vt-12')">顯示 / 隱藏全部注音</button>
+    </div>
+
+    <div class="section-title"><span>📊</span> 第12課簡報</div>
+    <div class="carousel" id="car-L12">
+  <div class="carousel-inner"><img src="assets/slide_08.jpg" class="carousel-img active" loading="lazy" alt="slide 1">
+<img src="assets/slide_09.jpg" class="carousel-img" loading="lazy" alt="slide 2">
+<img src="assets/slide_10.jpg" class="carousel-img" loading="lazy" alt="slide 3">
+<img src="assets/slide_11.jpg" class="carousel-img" loading="lazy" alt="slide 4">
+<img src="assets/slide_12.jpg" class="carousel-img" loading="lazy" alt="slide 5">
+<img src="assets/slide_13.jpg" class="carousel-img" loading="lazy" alt="slide 6">
+<img src="assets/slide_14.jpg" class="carousel-img" loading="lazy" alt="slide 7">
+<img src="assets/slide_15.jpg" class="carousel-img" loading="lazy" alt="slide 8"></div>
+  <div class="carousel-controls">
+    <button class="car-btn" onclick="carGo('car-L12',-1)">&#8249;</button>
+    <span class="car-idx" id="car-L12-idx">1 / 8</span>
+    <button class="car-btn" onclick="carGo('car-L12',1)">&#8250;</button>
+  </div>
+</div>
+
+    <div class="section-title"><span>✏️</span> 習寫字（點擊聽發音）</div>
+    <div class="card">
+      <div class="char-grid-v"><div class="char-box-v" data-char="段" data-zy="ㄉㄨㄢˋ"><span class="char-main">段</span><div class="zy-col"><span>ㄉ</span><span>ㄨ</span><span class="zy-row">ㄢ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="同" data-zy="ㄊㄨㄥˊ"><span class="char-main">同</span><div class="zy-col"><span>ㄊ</span><span>ㄨ</span><span class="zy-row">ㄥ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="決" data-zy="ㄐㄩㄝˊ"><span class="char-main">決</span><div class="zy-col"><span>ㄐ</span><span>ㄩ</span><span class="zy-row">ㄝ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="定" data-zy="ㄉㄧㄥˋ"><span class="char-main">定</span><div class="zy-col"><span>ㄉ</span><span>ㄧ</span><span class="zy-row">ㄥ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="故" data-zy="ㄍㄨˋ"><span class="char-main">故</span><div class="zy-col"><span>ㄍ</span><span class="zy-row">ㄨ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="事" data-zy="ㄕˋ"><span class="char-main">事</span><div class="zy-col"><span class="zy-row">ㄕ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="動" data-zy="ㄉㄨㄥˋ"><span class="char-main">動</span><div class="zy-col"><span>ㄉ</span><span>ㄨ</span><span class="zy-row">ㄥ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="物" data-zy="ㄨˋ"><span class="char-main">物</span><div class="zy-col"><span class="zy-row">ㄨ<span class="zy-tone">ˋ</span></span></div></div>
+<div class="char-box-v" data-char="拍" data-zy="ㄆㄞ"><span class="char-main">拍</span><div class="zy-col"><span>ㄆ</span><span>ㄞ</span></div></div>
+<div class="char-box-v" data-char="臺" data-zy="ㄊㄞˊ"><span class="char-main">臺</span><div class="zy-col"><span>ㄊ</span><span class="zy-row">ㄞ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="演" data-zy="ㄧㄢˇ"><span class="char-main">演</span><div class="zy-col"><span>ㄧ</span><span class="zy-row">ㄢ<span class="zy-tone">ˇ</span></span></div></div>
+<div class="char-box-v" data-char="時" data-zy="ㄕˊ"><span class="char-main">時</span><div class="zy-col"><span class="zy-row">ㄕ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="間" data-zy="ㄐㄧㄢ"><span class="char-main">間</span><div class="zy-col"><span>ㄐ</span><span>ㄧ</span><span>ㄢ</span></div></div></div>
+      <div class="recog-label">🔍 認讀字</div>
+      <div class="char-grid-v"><div class="char-box-v" data-char="緊" data-zy="ㄐㄧㄣˇ"><span class="char-main">緊</span><div class="zy-col"><span>ㄐ</span><span>ㄧ</span><span class="zy-row">ㄣ<span class="zy-tone">ˇ</span></span></div></div>
+<div class="char-box-v" data-char="張" data-zy="ㄓㄤ"><span class="char-main">張</span><div class="zy-col"><span>ㄓ</span><span>ㄤ</span></div></div>
+<div class="char-box-v" data-char="角" data-zy="ㄐㄩㄝˊ"><span class="char-main">角</span><div class="zy-col"><span>ㄐ</span><span>ㄩ</span><span class="zy-row">ㄝ<span class="zy-tone">ˊ</span></span></div></div>
+<div class="char-box-v" data-char="色" data-zy="ㄙㄜˋ"><span class="char-main">色</span><div class="zy-col"><span>ㄙ</span><span class="zy-row">ㄜ<span class="zy-tone">ˋ</span></span></div></div></div>
+    </div>
+
+    <div class="section-title"><span>🖼️</span> 課文生字卡</div>
+    <div class="card">
+      <img src="assets/chars_L12.jpg" class="infographic-img" loading="lazy" alt="L12生字卡"
+           onclick="openOverlay(this.src)">
+    </div>
+
+    <div class="section-title"><span>🗺️</span> 課文故事地圖</div>
+    <div class="card" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+      <img src="assets/theme_L12.jpg" class="infographic-img" loading="lazy" alt="L12故事地圖"
+           style="flex:1;min-width:260px" onclick="openOverlay(this.src)">
+      <img src="assets/text_L12.jpg" class="infographic-img portrait" loading="lazy" alt="L12課文直式"
+           onclick="openOverlay(this.src)">
+    </div>
+
+    <!-- 重點句型 -->
+    <div class="section-title"><span>💬</span> 重點句型</div>
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse">
+        <tr style="border-bottom:1px solid rgba(255,255,255,.1)">
+          <td style="padding:10px;color:var(--yellow);font-weight:600;width:42%">「～，好緊張！」</td>
+          <td style="padding:10px;color:var(--chalk-dim)">表達心情的句型</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.1)">
+          <td style="padding:10px;color:var(--yellow);font-weight:600">「商量了好久，決定～。」</td>
+          <td style="padding:10px;color:var(--chalk-dim)">描述決策過程</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;color:var(--yellow);font-weight:600">「原來～，一點也不可怕！」</td>
+          <td style="padding:10px;color:var(--chalk-dim)">克服恐懼後的發現</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Quiz L12 -->
+    <div class="section-title"><span>✅</span> 形成性評量</div>
+    <div class="quiz-section">
+      <div class="quiz-title">一、選詞填空</div>
+
+      <div class="fill-blank">
+        <div class="blank-sentence">同學們商量了好久，<span class="blank-slot" id="b3">　　</span>說三隻小豬的故事。</div>
+        <div class="blank-options">
+          <button onclick="fillBlank('b3',this,true)">決定</button>
+          <button onclick="fillBlank('b3',this,false)">動物</button>
+          <button onclick="fillBlank('b3',this,false)">一段</button>
+        </div>
+      </div>
+
+      <div class="fill-blank">
+        <div class="blank-sentence">台下的同學們一起<span class="blank-slot" id="b4">　　</span>，大聲喊「好棒！好棒！」</div>
+        <div class="blank-options">
+          <button onclick="fillBlank('b4',this,true)">拍手</button>
+          <button onclick="fillBlank('b4',this,false)">上臺</button>
+          <button onclick="fillBlank('b4',this,false)">演出</button>
+        </div>
+      </div>
+
+      <div class="quiz-title" style="margin-top:16px">二、是非題</div>
+      <div class="tf-item">
+        <span class="tf-text">同學們一開始就不緊張，很有信心。</span>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-o" onclick="checkTF(this,false)">O</button>
+          <button class="tf-btn tf-x" onclick="checkTF(this,true)">X</button>
+        </div>
+      </div>
+      <div class="tf-item">
+        <span class="tf-text">千千說故事，聲音又大又好聽。</span>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-o" onclick="checkTF(this,true)">O</button>
+          <button class="tf-btn tf-x" onclick="checkTF(this,false)">X</button>
+        </div>
+      </div>
+      <div class="tf-item">
+        <span class="tf-text">「我」最後覺得上臺說故事很好玩。</span>
+        <div class="tf-buttons">
+          <button class="tf-btn tf-o" onclick="checkTF(this,true)">O</button>
+          <button class="tf-btn tf-x" onclick="checkTF(this,false)">X</button>
+        </div>
+      </div>
+
+      <div class="quiz-title" style="margin-top:16px">三、選擇題</div>
+      <div class="quiz-item">
+        <div class="quiz-q">Q1. 全班決定說什麼故事？</div>
+        <div class="quiz-opts">
+          <button onclick="checkQuiz(this,false)">A. 小紅帽</button>
+          <button onclick="checkQuiz(this,true)">B. 三隻小豬</button>
+          <button onclick="checkQuiz(this,false)">C. 白雪公主</button>
+          <button onclick="checkQuiz(this,false)">D. 睡美人</button>
+        </div>
+      </div>
+      <div class="quiz-item">
+        <div class="quiz-q">Q2. 亮亮演什麼角色？</div>
+        <div class="quiz-opts">
+          <button onclick="checkQuiz(this,false)">A. 小豬</button>
+          <button onclick="checkQuiz(this,false)">B. 老師</button>
+          <button onclick="checkQuiz(this,true)">C. 大野狼</button>
+          <button onclick="checkQuiz(this,false)">D. 千千</button>
+        </div>
+      </div>
+      <div class="quiz-item">
+        <div class="quiz-q">Q3. 說故事之前，「我」的心情是？</div>
+        <div class="quiz-opts">
+          <button onclick="checkQuiz(this,false)">A. 很高興</button>
+          <button onclick="checkQuiz(this,false)">B. 生氣</button>
+          <button onclick="checkQuiz(this,true)">C. 緊張</button>
+          <button onclick="checkQuiz(this,false)">D. 很無聊</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="teacher-only">
+      <h4>📋 教師提示 — 第12課</h4>
+      <ul style="color:var(--chalk-dim);font-size:.9em;line-height:2;padding-left:16px">
+        <li>帶入生活情境：你有上台表演過嗎？感覺怎樣？</li>
+        <li>討論：緊張的時候要怎麼辦？合作有什麼好處？</li>
+        <li>注意：「間」在「時間」讀ㄐㄧㄢ一聲；「角」在「角色」讀ㄐㄩㄝˊ</li>
+        <li>「臺」字與「台」：正式用字為「臺」，兩字均可接受</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════ 總結 & 影片 ════════════════ -->
+  <div style="margin-top:40px;padding-top:24px;border-top:1px dashed rgba(255,213,79,.3)">
+    <div class="section-title"><span>🌟</span> 總結複習</div>
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse">
+        <tr style="background:rgba(255,255,255,.05)">
+          <th style="padding:10px;text-align:left;color:var(--yellow);border-bottom:1px solid rgba(255,255,255,.1)">課名</th>
+          <th style="padding:10px;text-align:left;color:var(--yellow);border-bottom:1px solid rgba(255,255,255,.1)">主旨</th>
+          <th style="padding:10px;text-align:left;color:var(--yellow);border-bottom:1px solid rgba(255,255,255,.1)">核心句型</th>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.07)">
+          <td style="padding:10px;color:var(--chalk)">第11課 鉛筆和橡皮擦</td>
+          <td style="padding:10px;color:var(--chalk-dim)">朋友互助，不怕失敗</td>
+          <td style="padding:10px;color:var(--green)">再試試看！有你才能進步。</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;color:var(--chalk)">第12課 上臺說故事</td>
+          <td style="padding:10px;color:var(--chalk-dim)">合作勇敢，克服緊張</td>
+          <td style="padding:10px;color:var(--green)">原來上臺，一點也不可怕！</td>
+        </tr>
+      </table>
+    </div>
+
+    
+<div class="section-title"><span>🎬</span> 學生自學影片</div>
+<div class="card">
+  <p style="font-size:.82rem;color:var(--chalk-dim);margin-bottom:12px">NotebookLM 生成｜第11-12課課文內容、生字詞彙、重點句型完整講解</p>
+  <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,.1)">
+    <iframe src="https://www.youtube.com/embed/uZhSgnMNGU4"
+      style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen loading="lazy" title="翰林版小一下 第11-12課｜學生自學影片"></iframe>
+  </div>
+</div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- Floating tools -->
+<div class="float-tools">
+  <button class="float-btn" title="字體大小" onclick="togglePanel('panel-font')">Ａ</button>
+  <div class="float-panel" id="panel-font">
+    <h4>字體大小</h4>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="car-btn" onclick="adjustFont(-2)">A-</button>
+      <button class="car-btn" onclick="adjustFont(0)">重設</button>
+      <button class="car-btn" onclick="adjustFont(2)">A+</button>
+    </div>
+  </div>
+  <button class="float-btn" title="抽籤" onclick="togglePanel('panel-lot')">🎲</button>
+  <div class="float-panel" id="panel-lot">
+    <h4>抽籤器</h4>
+    <div style="text-align:center">
+      <div id="lot-result" style="font-size:2em;color:var(--yellow);margin:10px 0">？</div>
+      <button class="toggle-zy-btn" onclick="drawLot()">抽一個</button>
+      <div style="margin-top:8px;font-size:.75em;color:var(--chalk-dim)">座號 1~<input id="lot-max" type="number" value="30" min="1" max="50" style="width:40px;background:transparent;border:none;border-bottom:1px solid var(--chalk-dim);color:var(--chalk);text-align:center">號</div>
+    </div>
+  </div>
+  <button class="float-btn" title="計時器" onclick="togglePanel('panel-timer')">⏱</button>
+  <div class="float-panel" id="panel-timer">
+    <h4>計時器</h4>
+    <div style="text-align:center">
+      <div id="timer-display" style="font-size:2em;color:var(--yellow);margin:8px 0">00:00</div>
+      <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+        <button class="toggle-zy-btn" onclick="setTimer(60)">1分</button>
+        <button class="toggle-zy-btn" onclick="setTimer(180)">3分</button>
+        <button class="toggle-zy-btn" onclick="setTimer(300)">5分</button>
+        <button class="toggle-zy-btn" onclick="timerStart()">▶</button>
+        <button class="toggle-zy-btn" onclick="timerStop()">⏹</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Mode ───────────────────────────────────────────────
+function setMode(m){
+  var pw=m==='teacher'?prompt('教師密碼：'):'';
+  if(m==='teacher'&&pw!=='math2026'){alert('密碼錯誤');return;}
+  document.body.classList.toggle('teacher-mode',m==='teacher');
+  document.getElementById('btn-student').classList.toggle('active',m==='student');
+  document.getElementById('btn-teacher').classList.toggle('active',m==='teacher');
+}
+
+// ─── Carousel ───────────────────────────────────────────
+var carState={};
+function carGo(id,dir){
+  var c=document.getElementById(id);
+  if(!c)return;
+  var imgs=c.querySelectorAll('.carousel-inner img');
+  if(!imgs.length)return;
+  var n=carState[id]||0;
+  imgs[n].classList.remove('active');
+  n=(n+dir+imgs.length)%imgs.length;
+  imgs[n].classList.add('active');
+  carState[id]=n;
+  var el=document.getElementById(id+'-idx');
+  if(el)el.textContent=(n+1)+' / '+imgs.length;
+}
+
+// ─── Vertical text ZY ───────────────────────────────────
+var allZYState={};
+function toggleAllZY(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  allZYState[id]=!allZYState[id];
+  el.classList.toggle('show-all-zy',allZYState[id]);
+  if(allZYState[id]){
+    el.querySelectorAll('.vchar').forEach(function(ch){
+      if(!ch.querySelector('.inline-zy')&&ch.dataset.zy){
+        var sp=document.createElement('span');
+        sp.className='inline-zy';sp.textContent=ch.dataset.zy;
+        ch.appendChild(sp);
+      }
+    });
+  }
+}
+document.querySelectorAll('.vchar').forEach(function(ch){
+  ch.addEventListener('mouseenter',function(){
+    if(!ch.querySelector('.inline-zy')&&ch.dataset.zy){
+      var sp=document.createElement('span');
+      sp.className='inline-zy';sp.textContent=ch.dataset.zy;
+      ch.appendChild(sp);
+    }
+    if(ch.querySelector('.inline-zy'))ch.querySelector('.inline-zy').style.display='block';
+  });
+  ch.addEventListener('mouseleave',function(){
+    var sp=ch.querySelector('.inline-zy');
+    var pid=ch.closest('.vertical-text')&&ch.closest('.vertical-text').id;
+    if(sp&&!allZYState[pid])sp.style.display='none';
+  });
+  ch.addEventListener('click',function(){
+    if('speechSynthesis' in window){
+      var u=new SpeechSynthesisUtterance(ch.textContent.trim());
+      u.lang='zh-TW';u.rate=0.7;
+      speechSynthesis.cancel();speechSynthesis.speak(u);
+    }
+  });
+});
+
+// ─── Char box tooltip & speech ──────────────────────────
+(function(){
+  var tip=document.getElementById('zy-tip');
+  function moveTip(e){
+    var x=e.clientX+14,y=e.clientY-80;
+    tip.style.left=Math.min(x,window.innerWidth-100)+'px';
+    tip.style.top=Math.max(y,8)+'px';
+  }
+  document.querySelectorAll('.char-box-v').forEach(function(box){
+    box.addEventListener('mouseenter',function(e){
+      tip.querySelector('.zy-tip-char').textContent=box.dataset.char;
+      tip.querySelector('.zy-tip-zy').textContent=box.dataset.zy;
+      tip.classList.add('show');moveTip(e);
+    });
+    box.addEventListener('mousemove',moveTip);
+    box.addEventListener('mouseleave',function(){tip.classList.remove('show');});
+    box.addEventListener('click',function(){
+      if('speechSynthesis' in window){
+        var u=new SpeechSynthesisUtterance(box.dataset.char);
+        u.lang='zh-TW';u.rate=0.75;
+        speechSynthesis.cancel();speechSynthesis.speak(u);
+      }
+    });
+  });
+})();
+
+// ─── Quiz ────────────────────────────────────────────────
+function fillBlank(id,btn,correct){
+  var slot=document.getElementById(id);
+  var parent=btn.closest('.fill-blank');
+  parent.querySelectorAll('button').forEach(function(b){b.classList.remove('correct','wrong');});
+  slot.textContent=btn.textContent;
+  btn.classList.add(correct?'correct':'wrong');
+  if(correct)slot.style.color='#a5d6a7';else slot.style.color='#ff8a80';
+}
+function checkTF(btn,isCorrect){
+  var parent=btn.closest('.tf-item');
+  parent.querySelectorAll('.tf-btn').forEach(function(b){b.classList.remove('correct','wrong');});
+  btn.classList.add(isCorrect?'correct':'wrong');
+}
+function checkQuiz(btn,isCorrect){
+  var parent=btn.closest('.quiz-item');
+  parent.querySelectorAll('button').forEach(function(b){b.disabled=true;});
+  btn.classList.add(isCorrect?'correct':'wrong');
+}
+
+// ─── Fullscreen ──────────────────────────────────────────
+function openOverlay(src){
+  document.getElementById('overlay-img').src=src;
+  document.getElementById('img-overlay').classList.add('open');
+}
+
+// ─── Float panel ────────────────────────────────────────
+function togglePanel(id){
+  var p=document.getElementById(id);
+  var wasOpen=p.classList.contains('open');
+  document.querySelectorAll('.float-panel').forEach(function(pp){pp.classList.remove('open');});
+  if(!wasOpen)p.classList.add('open');
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.float-tools'))
+    document.querySelectorAll('.float-panel').forEach(function(p){p.classList.remove('open');});
+});
+
+// ─── Font size ───────────────────────────────────────────
+var baseFontSize=16;
+function adjustFont(delta){
+  baseFontSize=delta===0?16:Math.min(24,Math.max(12,baseFontSize+delta));
+  document.body.style.fontSize=baseFontSize+'px';
+}
+
+// ─── Lot ─────────────────────────────────────────────────
+function drawLot(){
+  var max=parseInt(document.getElementById('lot-max').value)||30;
+  var n=Math.floor(Math.random()*max)+1;
+  document.getElementById('lot-result').textContent=n+'號';
+}
+
+// ─── Timer ───────────────────────────────────────────────
+var timerLeft=0,timerInterval=null;
+function setTimer(s){timerLeft=s;renderTimer();}
+function renderTimer(){
+  var m=Math.floor(timerLeft/60),s=timerLeft%60;
+  document.getElementById('timer-display').textContent=
+    String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function timerStart(){
+  if(timerInterval)clearInterval(timerInterval);
+  timerInterval=setInterval(function(){
+    if(timerLeft<=0){clearInterval(timerInterval);alert('時間到！');return;}
+    timerLeft--;renderTimer();
+  },1000);
+}
+function timerStop(){
+  if(timerInterval)clearInterval(timerInterval);
+  timerInterval=null;
+}
+</script>
+</body>
+</html>
