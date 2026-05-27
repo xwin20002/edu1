@@ -1,0 +1,12 @@
+# 原始大檔，不上傳 GitHub
+assets/*.png
+assets/*.pdf
+assets/*.mp4
+assets/*.mp3
+
+# 數學科簡報 PDF 例外（需 serve）
+!math/assets/*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
