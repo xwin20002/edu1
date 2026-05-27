@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第4單元：100 以內的數</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --board:#1a2a1a; --board-light:#243524; --chalk:#e8e4d8; --chalk-dim:#a8a498;
+  --yellow:#ffd54f; --wood:#8d6e4a; --wood-dark:#5d4530; --wood-light:#a8875a;
+  --pink:#ff8a80; --blue:#81d4fa; --green:#a5d6a7; --orange:#ffb74d; --purple:#ce93d8;
+  --formula:#ffeb3b;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Noto Sans TC',sans-serif; background:var(--board); color:var(--chalk); line-height:1.8; font-size:18px; }
+header { position:sticky; top:0; z-index:100; background:linear-gradient(180deg,var(--wood-light),var(--wood),var(--wood-dark)); border-bottom:4px solid var(--wood-dark); text-align:center; padding:12px 16px; box-shadow:0 4px 12px rgba(0,0,0,.5); }
+header h1 { font-size:1.6em; color:#fff; text-shadow:1px 1px 3px rgba(0,0,0,.6); }
+header .badge { display:inline-block; background:var(--yellow); color:var(--wood-dark); font-size:.5em; padding:2px 10px; border-radius:12px; margin-left:8px; vertical-align:middle; font-weight:700; }
+.mode-bar { display:flex; justify-content:center; gap:8px; background:var(--board-light); padding:8px; border-bottom:2px solid var(--wood-dark); }
+.mode-btn { padding:6px 20px; border:2px solid var(--chalk-dim); border-radius:20px; background:transparent; color:var(--chalk-dim); cursor:pointer; font-family:inherit; font-size:.9em; transition:.2s; }
+.mode-btn.active { background:var(--yellow); color:var(--wood-dark); border-color:var(--yellow); font-weight:700; }
+.mode-btn:hover { opacity:.85; }
+.container { max-width:960px; margin:0 auto; padding:20px 16px 80px; }
+.back-btn { display:inline-block; margin-bottom:16px; padding:6px 16px; background:var(--wood); color:#fff; border-radius:8px; text-decoration:none; font-size:.9em; transition:.2s; }
+.back-btn:hover { background:var(--wood-light); }
+.section { background:var(--board-light); border:1px solid var(--wood); border-radius:12px; padding:24px; margin-bottom:24px; }
+h2 { color:var(--yellow); font-size:1.3em; padding-bottom:6px; border-bottom:2px dashed var(--yellow); margin-bottom:16px; }
+h3 { color:var(--green); font-size:1.1em; margin:14px 0 8px; }
+.objectives { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.obj-chip { background:rgba(129,212,250,.15); color:var(--blue); border:1px solid var(--blue); padding:4px 14px; border-radius:20px; font-size:.85em; }
+table { width:100%; border-collapse:collapse; margin:12px 0; }
+th { background:rgba(255,213,79,.2); color:var(--yellow); }
+th, td { border:1px solid var(--wood); padding:8px 12px; text-align:center; font-size:.95em; }
+td { color:var(--chalk); }
+ul.bullet { list-style:disc; padding-left:24px; margin:8px 0; }
+ul.bullet li { margin-bottom:4px; }
+.note { border-left:4px solid var(--blue); background:rgba(129,212,250,.08); padding:10px 14px; margin:12px 0; border-radius:0 8px 8px 0; font-size:.95em; }
+
+.math-display { background:rgba(0,0,0,.25); border-radius:8px; padding:14px; margin:10px 0; text-align:center; font-size:1.2rem; color:var(--formula); overflow-x:auto; border:1px solid rgba(255,235,59,.25); }
+
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+.step-card { background:rgba(255,213,79,.08); border:1px solid var(--wood); border-radius:10px; padding:14px; text-align:center; }
+.step-num { font-size:1.6em; color:var(--yellow); font-weight:900; }
+.step-title { color:var(--green); font-weight:700; margin:4px 0; }
+.step-desc { font-size:.9em; color:var(--chalk-dim); }
+
+.solve-steps { margin:10px 0; }
+.solve-item { background:rgba(255,213,79,.06); border:1px solid rgba(255,213,79,.3); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+.solve-head { background:none; border:none; width:100%; text-align:left; padding:12px 16px; color:var(--yellow); font-weight:700; cursor:pointer; font-family:inherit; font-size:1em; display:flex; justify-content:space-between; align-items:center; }
+.solve-head::after { content:'▼'; transition:transform .2s; font-size:.85em; }
+.solve-item.open .solve-head::after { transform:rotate(180deg); }
+.solve-body { padding:0 16px; max-height:0; overflow:hidden; transition:max-height .35s, padding .35s; color:var(--chalk); }
+.solve-item.open .solve-body { max-height:700px; padding:8px 16px 16px; }
+.example-q { color:var(--blue); font-weight:600; margin-bottom:8px; }
+.example-a { color:var(--green); font-weight:600; margin-top:8px; }
+
+.obs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:12px 0; }
+.obs-card { background:rgba(165,214,167,.08); border:1px solid var(--green); border-radius:10px; padding:14px; }
+.obs-title { color:var(--orange); font-weight:700; margin-bottom:4px; }
+.obs-desc { font-size:.9em; color:var(--chalk); }
+
+.calc-grid { display:grid; gap:12px; margin:10px 0; }
+.calc-item { background:rgba(165,214,167,.08); border:1px solid rgba(165,214,167,.35); border-radius:10px; padding:14px; }
+.calc-q { color:var(--chalk); font-weight:500; margin-bottom:10px; }
+.calc-input { padding:6px 12px; border:2px solid var(--chalk-dim); border-radius:8px; background:rgba(0,0,0,.3); color:var(--formula); font-family:inherit; font-size:1.05em; width:100px; text-align:center; }
+.calc-unit { color:var(--chalk-dim); margin-left:4px; }
+.calc-btn { padding:6px 16px; border:2px solid var(--yellow); border-radius:8px; background:var(--yellow); color:var(--wood-dark); cursor:pointer; font-family:inherit; font-size:.9em; font-weight:700; margin-left:6px; }
+.calc-feedback { display:inline-block; margin-left:10px; font-size:.95em; font-weight:700; }
+.calc-feedback.correct { color:var(--green); }
+.calc-feedback.wrong { color:var(--pink); }
+
+.quiz-item, .tf-item, .fill-item { margin-bottom:16px; }
+.quiz-q, .tf-q, .fill-q { margin-bottom:8px; font-weight:500; }
+.quiz-opts { display:flex; flex-wrap:wrap; gap:8px; }
+.quiz-opts button, .tf-btns button, .fill-btn { padding:6px 16px; border:2px solid var(--chalk-dim); border-radius:8px; background:transparent; color:var(--chalk); cursor:pointer; font-family:inherit; font-size:.9em; transition:.2s; }
+.quiz-opts button:hover, .tf-btns button:hover, .fill-btn:hover { border-color:var(--yellow); }
+.correct { background:rgba(165,214,167,.3)!important; border-color:var(--green)!important; color:var(--green)!important; }
+.wrong { background:rgba(255,138,128,.3)!important; border-color:var(--pink)!important; color:var(--pink)!important; }
+.tf-btns { display:flex; gap:8px; }
+.fill-item { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.fill-q { flex:1 1 100%; }
+.fill-input { padding:6px 12px; border:2px solid var(--chalk-dim); border-radius:8px; background:transparent; color:var(--yellow); font-family:inherit; font-size:1em; width:120px; text-align:center; }
+.fill-feedback { font-size:.9em; margin-left:4px; }
+
+#teacher-only { display:none; }
+.tool-panel{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:400;display:flex;align-items:stretch}
+.tool-toggle{background:var(--wood);color:#fff;border:none;width:28px;border-radius:10px 0 0 10px;cursor:pointer;font-size:.82em;writing-mode:vertical-rl;letter-spacing:3px;padding:14px 4px;box-shadow:-3px 0 12px rgba(0,0,0,.4);transition:background .2s;font-family:inherit}
+.tool-toggle:hover{background:var(--wood-light)}
+.tool-content{background:#162616;border:2px solid rgba(232,228,216,.18);border-right:none;border-radius:12px 0 0 12px;padding:14px 12px;display:none;flex-direction:column;gap:14px;width:164px;box-shadow:-4px 0 20px rgba(0,0,0,.5)}
+.tool-content.open{display:flex}
+.tool-lbl{font-size:.7em;color:var(--chalk-dim);letter-spacing:1px;border-bottom:1px solid rgba(232,228,216,.1);padding-bottom:4px;margin-bottom:2px}
+.font-ctrl{display:flex;align-items:center;gap:6px;justify-content:center}
+.font-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.4);color:var(--yellow);border-radius:6px;width:32px;height:30px;font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.font-btn:hover{background:rgba(255,213,79,.3)}
+.font-val{font-size:.8em;color:var(--chalk-dim);min-width:38px;text-align:center}
+.timer-disp{font-family:'Courier New',monospace;font-size:1.9em;color:var(--yellow);text-align:center;letter-spacing:2px;margin:4px 0}
+.timer-disp.running{color:var(--green)}
+.timer-disp.ended{color:var(--pink);animation:blink .7s infinite}
+@keyframes blink{50%{opacity:.3}}
+.timer-presets{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.timer-preset{background:rgba(129,212,250,.1);border:1px solid rgba(129,212,250,.3);color:var(--blue);border-radius:6px;padding:3px 7px;font-size:.72em;cursor:pointer;font-family:inherit}
+.timer-preset:hover{background:rgba(129,212,250,.25)}
+.timer-btns{display:flex;gap:4px;justify-content:center}
+.timer-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.3);color:var(--yellow);border-radius:6px;padding:4px 0;font-size:.82em;cursor:pointer;flex:1;font-family:inherit}
+.timer-btn:hover{background:rgba(255,213,79,.3)}
+.timer-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+.draw-btn{background:rgba(232,228,216,.1);border:1px solid rgba(232,228,216,.2);color:var(--chalk);border-radius:6px;padding:5px 0;font-size:.78em;cursor:pointer;width:100%;text-align:center;font-family:inherit}
+.draw-btn:hover{background:rgba(232,228,216,.2)}
+.draw-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+.draw-colors{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.draw-color{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+.draw-color:hover,.draw-color.active{transform:scale(1.3);border-color:white}
+.draw-sizes{display:flex;gap:6px;justify-content:center;align-items:center}
+.draw-size{border-radius:50%;background:var(--chalk);cursor:pointer;transition:transform .15s;border:2px solid transparent}
+.draw-size.active{border-color:var(--yellow);transform:scale(1.2)}
+#draw-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:350;display:none;cursor:crosshair;touch-action:none}
+#draw-canvas.active{display:block}
+
+/* 100 數字方陣 */
+.hundred-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:2px; max-width:520px; margin:14px auto; background:rgba(0,0,0,.3); padding:6px; border-radius:8px; }
+.hg-cell { aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--wood-dark); border-radius:4px; cursor:pointer; font-weight:700; font-size:.85em; transition:.15s; user-select:none; }
+.hg-cell:hover { background:var(--yellow); transform:scale(1.1); z-index:2; }
+.hg-cell.row-hl { background:rgba(255,213,79,.55); }
+.hg-cell.selected { background:var(--pink); color:#fff; transform:scale(1.15); }
+.hg-info { background:rgba(255,213,79,.1); border:1px solid var(--yellow); border-radius:10px; padding:14px; margin-top:14px; text-align:center; min-height:60px; color:var(--formula); font-size:1.1em; }
+</style>
+</head>
+<body>
+<canvas id="draw-canvas"></canvas>
+
+<div class="tool-panel">
+  <div class="tool-content" id="tool-content">
+    <div>
+      <div class="tool-lbl">字　級</div>
+      <div class="font-ctrl" style="margin-top:6px">
+        <button class="font-btn" id="font-dec">A−</button>
+        <span class="font-val" id="font-val">18px</span>
+        <button class="font-btn" id="font-inc">A＋</button>
+      </div>
+    </div>
+    <div>
+      <div class="tool-lbl">計時器</div>
+      <div class="timer-disp" id="timer-disp">05:00</div>
+      <div class="timer-presets">
+        <button class="timer-preset" data-sec="60">1分</button>
+        <button class="timer-preset" data-sec="180">3分</button>
+        <button class="timer-preset" data-sec="300">5分</button>
+        <button class="timer-preset" data-sec="600">10分</button>
+      </div>
+      <div class="timer-btns" style="margin-top:6px">
+        <button class="timer-btn" id="timer-start">▶ 開始</button>
+        <button class="timer-btn" id="timer-reset">↺ 重置</button>
+      </div>
+    </div>
+    <div>
+      <div class="tool-lbl">畫　筆</div>
+      <button class="draw-btn" id="draw-toggle" style="margin:6px 0">🖌️ 開啟畫筆</button>
+      <div class="draw-colors" style="margin-bottom:6px">
+        <div class="draw-color active" data-color="#ffd54f" style="background:#ffd54f"></div>
+        <div class="draw-color" data-color="#ff8a80" style="background:#ff8a80"></div>
+        <div class="draw-color" data-color="#81d4fa" style="background:#81d4fa"></div>
+        <div class="draw-color" data-color="#a5d6a7" style="background:#a5d6a7"></div>
+        <div class="draw-color" data-color="#ffffff" style="background:#fff;border:1px solid #666"></div>
+      </div>
+      <div class="draw-sizes" style="margin-bottom:6px">
+        <div class="draw-size" data-size="3" style="width:8px;height:8px"></div>
+        <div class="draw-size active" data-size="7" style="width:14px;height:14px"></div>
+        <div class="draw-size" data-size="14" style="width:22px;height:22px"></div>
+      </div>
+      <button class="draw-btn" id="draw-clear">🗑️ 清除畫布</button>
+    </div>
+  </div>
+  <button class="tool-toggle" id="tool-toggle">工具</button>
+</div>
+
+<header>
+  <h1>🔢 第 4 單元｜100 以內的數 <span class="badge">小一數學</span></h1>
+</header>
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('student')">學生模式</button>
+  <button class="mode-btn" onclick="setMode('teacher')">教師模式</button>
+</div>
+<div class="container">
+  <a href="../index.html" class="back-btn">← 返回總覽</a>
+
+  <div class="objectives">
+    <span class="obj-chip">會數到 100</span>
+    <span class="obj-chip">認識十位與個位</span>
+    <span class="obj-chip">用位值拆解兩位數</span>
+    <span class="obj-chip">比較兩位數大小</span>
+  </div>
+
+  <!-- 核心 -->
+  <div class="section">
+    <h2>📐 核心觀念</h2>
+    <h3>數到 100</h3>
+    <p>1、2、3 …… 一直數到 100。每數滿 10 個一，就湊成 1 個十。</p>
+
+    <h3>十位與個位</h3>
+    <p>兩位數有<strong style="color:var(--yellow)">兩個位置</strong>：左邊是「<strong style="color:var(--green)">十位</strong>」，右邊是「<strong style="color:var(--blue)">個位</strong>」。</p>
+    <div class="math-display">$$36 = 3 \text{ 個十} + 6 \text{ 個一} = 30 + 6$$</div>
+    <table>
+      <tr><th>數字</th><th>十位</th><th>個位</th><th>讀法</th></tr>
+      <tr><td>36</td><td style="color:var(--green)">3</td><td style="color:var(--blue)">6</td><td>三十六</td></tr>
+      <tr><td>50</td><td style="color:var(--green)">5</td><td style="color:var(--blue)">0</td><td>五十</td></tr>
+      <tr><td>72</td><td style="color:var(--green)">7</td><td style="color:var(--blue)">2</td><td>七十二</td></tr>
+    </table>
+
+    <h3>比較大小（先比十位）</h3>
+    <div class="note">
+      <strong>口訣：先看十位，再看個位。</strong><br>
+      ① 十位大的數比較大。<br>
+      ② 十位一樣大時，再比個位。
+    </div>
+  </div>
+
+  <!-- 解題 Accordion -->
+  <div class="section">
+    <h2>💡 解題步驟（點開展開）</h2>
+    <div class="solve-steps">
+      <div class="solve-item">
+        <button class="solve-head" onclick="toggleSolve(this)">例題 1：把 36 拆成「幾個十 + 幾個一」</button>
+        <div class="solve-body">
+          <div class="example-q">問題：$36$ 是由幾個十和幾個一組成？</div>
+          <ol style="padding-left:24px">
+            <li>看十位：3 → 表示<strong style="color:var(--green)">「3 個十」</strong> = $30$</li>
+            <li>看個位：6 → 表示<strong style="color:var(--blue)">「6 個一」</strong> = $6$</li>
+            <li>合起來：$30 + 6 = 36$</li>
+          </ol>
+          <div class="example-a">答：$36 = 3 \text{ 個十} + 6 \text{ 個一}$</div>
+        </div>
+      </div>
+
+      <div class="solve-item">
+        <button class="solve-head" onclick="toggleSolve(this)">例題 2：比大小 — 45 vs 38、72 vs 78</button>
+        <div class="solve-body">
+          <div class="example-q">問題 (a)：$45$ 和 $38$ 哪個大？</div>
+          <ol style="padding-left:24px">
+            <li>比十位：$45$ 的十位是 <span style="color:var(--green)">4</span>，$38$ 的十位是 <span style="color:var(--green)">3</span></li>
+            <li>$4 > 3$，所以十位大的比較大</li>
+          </ol>
+          <div class="example-a">答：$45 > 38$</div>
+
+          <div class="example-q" style="margin-top:14px">問題 (b)：$72$ 和 $78$ 哪個大？</div>
+          <ol style="padding-left:24px">
+            <li>比十位：兩個都是 <span style="color:var(--green)">7</span>（$7 = 7$），<strong>十位一樣大</strong></li>
+            <li>再比個位：$72$ 的個位是 <span style="color:var(--blue)">2</span>，$78$ 的個位是 <span style="color:var(--blue)">8</span></li>
+            <li>$2 < 8$，所以個位大的比較大</li>
+          </ol>
+          <div class="example-a">答：$72 < 78$</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互動計算題 -->
+  <div class="section">
+    <h2>🧮 互動計算題（馬上試試看）</h2>
+    <p style="color:var(--chalk-dim);font-size:.9em;margin-bottom:12px">輸入答案後按「確認」，會立刻檢查對錯。</p>
+    <div class="calc-grid">
+      <div class="calc-item">
+        <div class="calc-q">1. $47$ 的<strong style="color:var(--green)">十位</strong>是幾？</div>
+        <input class="calc-input" data-ans="4" placeholder="?">
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">2. $3 \text{ 個十} + 5 \text{ 個一} = ?$</div>
+        <input class="calc-input" data-ans="35" placeholder="?">
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">3. $56$ 和 $65$ 哪個大？（填寫比較大的那個數字）</div>
+        <input class="calc-input" data-ans="65" placeholder="?">
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">4. $72$ 比 $70$ 大幾？</div>
+        <input class="calc-input" data-ans="2" placeholder="?">
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互動實驗：100 數字方陣 -->
+  <div class="section">
+    <h2>🎮 互動實驗：100 數字方陣</h2>
+    <p style="color:var(--chalk-dim);font-size:.9em;margin-bottom:8px">點任一格子，下方會顯示「N = X 個十 + Y 個一」。把滑鼠移到格子上，會把整個「十位列」標亮，幫你看清楚十位是怎麼分的。</p>
+    <div class="hundred-grid" id="hg"></div>
+    <div class="hg-info" id="hg-info">👆 點一個數字試試看！</div>
+  </div>
+
+  <!-- 數線小提示 -->
+  <div class="section">
+    <h2>數線小提示</h2>
+    <div class="obs-grid">
+      <div class="obs-card">
+        <div class="obs-title">整十數很好認</div>
+        <div class="obs-desc">$10、20、30、40、50、60、70、80、90、100$ 都是整十數，個位都是 $0$。</div>
+      </div>
+      <div class="obs-card">
+        <div class="obs-title">下一個 / 前一個</div>
+        <div class="obs-desc">$49$ 的下一個是 $50$，$70$ 的前一個是 $69$。數線往右越大，往左越小。</div>
+      </div>
+      <div class="obs-card">
+        <div class="obs-title">十位變了大小變很多</div>
+        <div class="obs-desc">$29$ 和 $30$ 雖然只差 1，但十位從 2 變成 3，要特別注意。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 評量 -->
+  <div class="section">
+    <h2>✅ 形成性評量</h2>
+
+    <h3>選擇題</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">1. $36$ 的念法是？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. 三六</button>
+        <button onclick="checkQ(this,'correct')">B. 三十六</button>
+        <button onclick="checkQ(this,'wrong')">C. 三百六</button>
+        <button onclick="checkQ(this,'wrong')">D. 六十三</button>
+      </div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">2. 下列哪個數的<strong style="color:var(--green)">十位</strong>等於 $5$？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. $15$</button>
+        <button onclick="checkQ(this,'wrong')">B. $45$</button>
+        <button onclick="checkQ(this,'correct')">C. $58$</button>
+        <button onclick="checkQ(this,'wrong')">D. $95$</button>
+      </div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">3. $72$ 的<strong style="color:var(--blue)">個位</strong>是？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. $7$</button>
+        <button onclick="checkQ(this,'correct')">B. $2$</button>
+        <button onclick="checkQ(this,'wrong')">C. $70$</button>
+        <button onclick="checkQ(this,'wrong')">D. $9$</button>
+      </div>
+    </div>
+
+    <h3>是非題</h3>
+    <div class="tf-item">
+      <div class="tf-q">1. $50 = 5 \text{ 個十}$</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'correct')">○ 對</button>
+        <button onclick="checkTF(this,'wrong')">✗ 錯</button>
+      </div>
+    </div>
+    <div class="tf-item">
+      <div class="tf-q">2. $26 < 22$</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'wrong')">○ 對</button>
+        <button onclick="checkTF(this,'correct')">✗ 錯</button>
+      </div>
+    </div>
+    <div class="tf-item">
+      <div class="tf-q">3. 只要十位相同，兩個數就一樣大</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'wrong')">○ 對</button>
+        <button onclick="checkTF(this,'correct')">✗ 錯</button>
+      </div>
+    </div>
+
+    <h3>填空題</h3>
+    <div class="fill-item">
+      <div class="fill-q">1. $48 = $ ___ $ \text{ 個十} + 8 \text{ 個一}$</div>
+      <input class="fill-input" data-ans="4" placeholder="？">
+      <button class="fill-btn" onclick="checkFill(this)">確認</button>
+      <span class="fill-feedback"></span>
+    </div>
+    <div class="fill-item">
+      <div class="fill-q">2. 填一個整十數，使式子成立：___ $< 70$（提示：寫一個比 70 小的整十數，例如 60、50…）</div>
+      <input class="fill-input" data-ans="60" data-accept="10,20,30,40,50,60" placeholder="？">
+      <button class="fill-btn" onclick="checkFill(this)">確認</button>
+      <span class="fill-feedback"></span>
+    </div>
+  </div>
+
+  <!-- 簡報 placeholder -->
+  <div class="section">
+    <h2>📊 授課簡報</h2>
+    <p style="font-size:.85rem;color:var(--chalk-dim);margin-bottom:12px">（待 NotebookLM 產出後嵌入 PDF / 圖片 carousel）</p>
+    <div style="background:rgba(0,0,0,.25);border:2px dashed var(--chalk-dim);border-radius:10px;padding:40px;text-align:center;color:var(--chalk-dim)">
+      📄 簡報尚未產出
+    </div>
+  </div>
+
+  <!-- 影片 placeholder -->
+  <div class="section">
+    <h2>🎬 學生自學影片</h2>
+    <p style="font-size:.85rem;color:var(--chalk-dim);margin-bottom:12px">（待 NotebookLM 影片產出後嵌入 YouTube unlisted iframe）</p>
+    <div style="background:rgba(0,0,0,.25);border:2px dashed var(--chalk-dim);border-radius:10px;padding:40px;text-align:center;color:var(--chalk-dim)">
+      📺 影片尚未產出
+    </div>
+  </div>
+
+  <!-- 教師模式 -->
+  <div id="teacher-only">
+    <div class="section">
+      <h2>👩‍🏫 教師備課區</h2>
+      <h3>教學策略</h3>
+      <ul class="bullet">
+        <li><strong>教具優先：</strong>用「十條（10 顆串成一條）」和「個顆」實體操作，讓學生親手把 36 排出來＝ 3 條 + 6 顆</li>
+        <li><strong>百數板：</strong>準備 1～100 的百數板，讓學生圈出十位相同的「同一橫列」，視覺化十位的概念</li>
+        <li><strong>生活金錢：</strong>用 10 元硬幣 ＋ 1 元硬幣對應「十位」和「個位」（例如 36 元 = 3 個十元 + 6 個一元）</li>
+        <li><strong>比較大小：</strong>先用百數板找位置，前面（左上）的數較小，後面（右下）的數較大</li>
+        <li><strong>數線練習：</strong>畫 0～100 的數線，讓學生標出指定的數，建立大小順序的直觀</li>
+      </ul>
+
+      <h3>Bloom 認知層次</h3>
+      <table>
+        <tr><th>層次</th><th>學習表現</th></tr>
+        <tr><td style="color:var(--blue)">記憶理解</td><td>能正確念出 100 以內的數、說出十位與個位是哪一邊</td></tr>
+        <tr><td style="color:var(--green)">應用</td><td>把兩位數拆成「幾個十 + 幾個一」、比較任兩數大小</td></tr>
+        <tr><td style="color:var(--orange)">分析</td><td>說明「為什麼十位相同還要看個位」、找出比某數大／小的所有兩位數</td></tr>
+      </table>
+
+      <h3>易錯點提醒</h3>
+      <ul class="bullet">
+        <li style="color:var(--pink)"><strong>讀寫錯誤：</strong>把 36（三十六）寫成 306，把「三十」和「六」分開寫</li>
+        <li style="color:var(--pink)"><strong>個位十位顛倒：</strong>把 36 念成「六十三」，或誤認 36 的十位是 6</li>
+        <li style="color:var(--pink)"><strong>十位相同還看十位：</strong>比 72 和 78 時，學生看到「十位都是 7」就說一樣大，忘了再比個位</li>
+        <li style="color:var(--pink)"><strong>整十數混淆：</strong>把 50 念成「五」或「五零」，沒注意到 0 在個位代表「沒有個一」</li>
+        <li style="color:var(--pink)"><strong>跨十位的下一個：</strong>說 49 的下一個是 410，沒理解「滿 10 個一要進位成 1 個十」</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// 工具面板
+document.getElementById('tool-toggle').onclick=function(){document.getElementById('tool-content').classList.toggle('open');};
+var fsize=18;
+function setFsize(n){fsize=Math.min(28,Math.max(12,n));document.body.style.fontSize=fsize+'px';document.getElementById('font-val').textContent=fsize+'px';}
+document.getElementById('font-inc').onclick=function(){setFsize(fsize+2);};
+document.getElementById('font-dec').onclick=function(){setFsize(fsize-2);};
+
+// 計時器
+var tSec=300,tRunning=false,tInterval=null;
+var tDisp=document.getElementById('timer-disp');
+var tStart=document.getElementById('timer-start');
+function tFmt(s){var m=Math.floor(s/60),sc=s%60;return(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;}
+function tTick(){if(tSec<=0){clearInterval(tInterval);tRunning=false;tDisp.textContent='00:00';tDisp.className='timer-disp ended';tStart.textContent='▶ 開始';tStart.classList.remove('on');return;}tSec--;tDisp.textContent=tFmt(tSec);}
+tStart.onclick=function(){if(tRunning){clearInterval(tInterval);tRunning=false;tDisp.classList.remove('running');this.textContent='▶ 開始';this.classList.remove('on');}else{tInterval=setInterval(tTick,1000);tRunning=true;tDisp.className='timer-disp running';this.textContent='⏸ 暫停';this.classList.add('on');}};
+document.getElementById('timer-reset').onclick=function(){clearInterval(tInterval);tRunning=false;tDisp.className='timer-disp';tStart.textContent='▶ 開始';tStart.classList.remove('on');tDisp.textContent=tFmt(tSec);};
+document.querySelectorAll('.timer-preset').forEach(function(btn){btn.onclick=function(){clearInterval(tInterval);tRunning=false;tSec=parseInt(this.dataset.sec);tDisp.className='timer-disp';tDisp.textContent=tFmt(tSec);tStart.textContent='▶ 開始';tStart.classList.remove('on');}});
+
+// 畫筆
+var canvas=document.getElementById('draw-canvas');
+var ctx=canvas.getContext('2d');
+var drawOn=false,drawing=false,dColor='#ffd54f',dSize=7;
+function resizeCanvas(){var data=ctx.getImageData(0,0,canvas.width||1,canvas.height||1);canvas.width=window.innerWidth;canvas.height=window.innerHeight;ctx.putImageData(data,0,0);ctx.lineCap='round';ctx.lineJoin='round';}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+document.getElementById('draw-toggle').onclick=function(){drawOn=!drawOn;canvas.classList.toggle('active',drawOn);this.textContent=drawOn?'✅ 關閉畫筆':'🖌️ 開啟畫筆';this.classList.toggle('on',drawOn);};
+document.getElementById('draw-clear').onclick=function(){ctx.clearRect(0,0,canvas.width,canvas.height);};
+document.querySelectorAll('.draw-color').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-color').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dColor=this.dataset.color;}});
+document.querySelectorAll('.draw-size').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-size').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dSize=parseInt(this.dataset.size);}});
+function pos(e){var r=canvas.getBoundingClientRect();if(e.touches)return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};return{x:e.clientX-r.left,y:e.clientY-r.top};}
+canvas.addEventListener('mousedown',function(e){drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;});
+canvas.addEventListener('mousemove',function(e){if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+canvas.addEventListener('mouseup',function(){drawing=false;});
+canvas.addEventListener('mouseleave',function(){drawing=false;});
+canvas.addEventListener('touchstart',function(e){e.preventDefault();drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;},{passive:false});
+canvas.addEventListener('touchmove',function(e){e.preventDefault();if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+canvas.addEventListener('touchend',function(){drawing=false;});
+
+// 模式切換
+function setMode(m){
+  document.querySelectorAll('.mode-btn').forEach(function(b,i){
+    b.classList.toggle('active', (m==='student'&&i===0)||(m==='teacher'&&i===1));
+  });
+  document.getElementById('teacher-only').style.display = m==='teacher'?'block':'none';
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+function toggleSolve(btn){
+  btn.parentNode.classList.toggle('open');
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+function checkQ(btn,result){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(result);
+}
+function checkTF(btn,result){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(result);
+}
+function checkFill(btn){
+  var input = btn.previousElementSibling;
+  var fb = btn.nextElementSibling;
+  var ans = input.getAttribute('data-ans');
+  var accept = input.getAttribute('data-accept');
+  var val = input.value.trim();
+  var ok = false;
+  if (accept) {
+    var list = accept.split(',').map(function(s){return s.trim();});
+    ok = list.indexOf(val) >= 0;
+  } else {
+    ok = (val === ans);
+  }
+  if (ok) {
+    fb.textContent='✔ 正確！'; fb.style.color='var(--green)';
+    input.style.borderColor='var(--green)';
+  } else {
+    fb.textContent='✘ 再想想，參考答案：'+ans; fb.style.color='var(--pink)';
+    input.style.borderColor='var(--pink)';
+  }
+}
+function checkCalc(btn){
+  var item = btn.closest('.calc-item');
+  var input = item.querySelector('.calc-input');
+  var fb = item.querySelector('.calc-feedback');
+  var raw = input.value.trim();
+  var ans = input.dataset.ans;
+  var ok = (raw === ans);
+  if (!ok) {
+    var rawNum = parseFloat(raw), ansNum = parseFloat(ans);
+    if (!isNaN(rawNum) && !isNaN(ansNum) && Math.abs(rawNum - ansNum) < 0.01) ok = true;
+  }
+  fb.textContent = ok ? '✓ 答對了！' : '✗ 正確答案：' + ans;
+  fb.className = 'calc-feedback ' + (ok ? 'correct' : 'wrong');
+  input.style.borderColor = ok ? 'var(--green)' : 'var(--pink)';
+}
+
+// 100 數字方陣
+(function(){
+  var grid = document.getElementById('hg');
+  var info = document.getElementById('hg-info');
+  var html = '';
+  for (var n = 1; n <= 100; n++) {
+    var row = Math.floor((n - 1) / 10); // 0..9
+    html += '<div class="hg-cell" data-n="'+n+'" data-row="'+row+'">'+n+'</div>';
+  }
+  grid.innerHTML = html;
+  var cells = grid.querySelectorAll('.hg-cell');
+  cells.forEach(function(c){
+    c.addEventListener('mouseenter', function(){
+      var r = this.dataset.row;
+      cells.forEach(function(x){ if (x.dataset.row === r) x.classList.add('row-hl'); });
+    });
+    c.addEventListener('mouseleave', function(){
+      cells.forEach(function(x){ x.classList.remove('row-hl'); });
+    });
+    c.addEventListener('click', function(){
+      cells.forEach(function(x){ x.classList.remove('selected'); });
+      this.classList.add('selected');
+      var n = parseInt(this.dataset.n, 10);
+      var t, o;
+      if (n === 100) { t = 10; o = 0; }
+      else { t = Math.floor(n / 10); o = n % 10; }
+      var label;
+      if (n === 100) {
+        label = '<strong>100</strong> = 10 個十（也就是 1 個百）';
+      } else if (t === 0) {
+        label = '<strong>'+n+'</strong> = '+o+' 個一';
+      } else {
+        label = '<strong>'+n+'</strong> = '+t+' 個十 + '+o+' 個一 = '+(t*10)+' + '+o;
+      }
+      info.innerHTML = label;
+    });
+  });
+})();
+</script>
+</body>
+</html>

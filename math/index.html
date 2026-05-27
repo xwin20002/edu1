@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>數學教學駕駛艙｜翰林版小一下 全 9 單元</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--board:#1a2a1a;--board-light:#243524;--chalk:#e8e4d8;--chalk-dim:#a8a498;
+  --yellow:#ffd54f;--wood:#8d6e4a;--wood-dark:#5d4530;--wood-light:#a8875a;
+  --green:#a5d6a7;--blue:#81d4fa;--pink:#ff8a80;--orange:#ffb74d;--purple:#ce93d8;--cyan:#80deea}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;background:var(--board);color:var(--chalk);min-height:100vh}
+header{background:linear-gradient(180deg,var(--wood-light) 0%,var(--wood) 40%,var(--wood-dark) 100%);padding:22px 28px 18px;box-shadow:0 4px 16px rgba(0,0,0,.5);border-bottom:3px solid #3a2a1a;text-align:center}
+header h1{font-size:1.6rem;font-weight:900;text-shadow:1px 1px 3px rgba(0,0,0,.5)}
+header .meta{font-size:.85rem;opacity:.85;margin-top:6px}
+.badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:2px 10px;font-size:.72rem;margin:0 4px}
+.container{max-width:1000px;margin:0 auto;padding:40px 20px 80px}
+h2{font-size:1.1rem;color:var(--yellow);margin-bottom:24px;padding-bottom:8px;border-bottom:2px dashed var(--yellow);text-align:center}
+.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.unit-card{background:var(--board-light);border:2px solid rgba(232,228,216,.2);border-radius:14px;padding:22px 20px;text-decoration:none;color:var(--chalk);display:block;transition:all .25s;box-shadow:inset 0 0 20px rgba(0,0,0,.3)}
+.unit-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.unit-card .num{font-size:.75rem;color:var(--chalk-dim);margin-bottom:6px}
+.unit-card .emoji{font-size:2.6rem;margin-bottom:8px;display:block}
+.unit-card h3{font-size:1.15rem;font-weight:700;margin-bottom:8px}
+.unit-card .theme{font-size:.8rem;color:var(--chalk-dim);margin-bottom:12px;min-height:2.4em}
+.unit-card .go-btn{display:inline-block;background:var(--yellow);color:#1a1a1a;border-radius:18px;padding:5px 14px;font-size:.78rem;font-weight:700}
+.u1 h3,.u3 h3,.u8 h3{color:var(--yellow)}
+.u2 h3{color:var(--cyan)}
+.u4 h3{color:var(--blue)}
+.u5 h3{color:var(--purple)}
+.u6 h3{color:var(--orange)}
+.u7 h3{color:var(--pink)}
+.u9 h3{color:var(--green)}
+.u1{border-color:var(--yellow)}.u3{border-color:var(--yellow)}.u8{border-color:var(--yellow)}
+.u2{border-color:var(--cyan)}.u4{border-color:var(--blue)}.u5{border-color:var(--purple)}
+.u6{border-color:var(--orange)}.u7{border-color:var(--pink)}.u9{border-color:var(--green)}
+footer{text-align:center;color:var(--chalk-dim);font-size:.78rem;padding:20px;margin-top:20px}
+footer a{color:var(--yellow);text-decoration:none}
+@media(max-width:600px){header h1{font-size:1.25rem}.unit-card .emoji{font-size:2.2rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔢 數學教學駕駛艙</h1>
+  <div class="meta">
+    <span class="badge">翰林版</span>
+    <span class="badge">一年級下學期</span>
+    <span class="badge">114學年度</span>
+  </div>
+</header>
+<div class="container">
+  <h2>🎒 選擇單元</h2>
+  <div class="units">
+    <a href="U1/index.html" class="unit-card u1"><div class="num">第 1 單元</div><span class="emoji">➕</span><h3>20 以內的加法</h3><div class="theme">湊十法・基本加法</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U2/index.html" class="unit-card u2"><div class="num">第 2 單元</div><span class="emoji">📏</span><h3>長度</h3><div class="theme">比較・量測・加減</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U3/index.html" class="unit-card u3"><div class="num">第 3 單元</div><span class="emoji">➖</span><h3>20 以內的減法</h3><div class="theme">拆十法・退位減法</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U4/index.html" class="unit-card u4"><div class="num">第 4 單元</div><span class="emoji">🔢</span><h3>100 以內的數</h3><div class="theme">位值・大小比較</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U5/index.html" class="unit-card u5"><div class="num">第 5 單元</div><span class="emoji">🔷</span><h3>形狀與形體</h3><div class="theme">平面圖形・立體形體</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U6/index.html" class="unit-card u6"><div class="num">第 6 單元</div><span class="emoji">💰</span><h3>數數看有多少元</h3><div class="theme">硬幣・紙鈔・金額</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U7/index.html" class="unit-card u7"><div class="num">第 7 單元</div><span class="emoji">📅</span><h3>幾月幾日星期幾</h3><div class="theme">月曆・大小月</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U8/index.html" class="unit-card u8"><div class="num">第 8 單元</div><span class="emoji">🧮</span><h3>兩位數的加減法</h3><div class="theme">直式・進位・退位</div><span class="go-btn">進入單元 →</span></a>
+    <a href="U9/index.html" class="unit-card u9"><div class="num">第 9 單元</div><span class="emoji">📊</span><h3>分類整理</h3><div class="theme">畫記・長條圖</div><span class="go-btn">進入單元 →</span></a>
+  </div>
+</div>
+<footer>
+  數學教學駕駛艙｜翰林版小一下 · <a href="https://github.com/xwin20002/edu1" target="_blank">GitHub</a>
+</footer>
+</body>
+</html>

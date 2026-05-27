@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第6單元：數數看有多少元</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --board:#1a2a1a; --board-light:#243524; --chalk:#e8e4d8; --chalk-dim:#a8a498;
+  --yellow:#ffd54f; --wood:#8d6e4a; --wood-dark:#5d4530; --wood-light:#a8875a;
+  --pink:#ff8a80; --blue:#81d4fa; --green:#a5d6a7; --orange:#ffb74d; --purple:#ce93d8;
+  --formula:#ffeb3b;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Noto Sans TC',sans-serif; background:var(--board); color:var(--chalk); line-height:1.8; font-size:18px; }
+header { position:sticky; top:0; z-index:100; background:linear-gradient(180deg,var(--wood-light),var(--wood),var(--wood-dark)); border-bottom:4px solid var(--wood-dark); text-align:center; padding:12px 16px; box-shadow:0 4px 12px rgba(0,0,0,.5); }
+header h1 { font-size:1.6em; color:#fff; text-shadow:1px 1px 3px rgba(0,0,0,.6); }
+header .badge { display:inline-block; background:var(--yellow); color:var(--wood-dark); font-size:.5em; padding:2px 10px; border-radius:12px; margin-left:8px; vertical-align:middle; font-weight:700; }
+.mode-bar { display:flex; justify-content:center; gap:8px; background:var(--board-light); padding:8px; border-bottom:2px solid var(--wood-dark); }
+.mode-btn { padding:6px 20px; border:2px solid var(--chalk-dim); border-radius:20px; background:transparent; color:var(--chalk-dim); cursor:pointer; font-family:inherit; font-size:.9em; transition:.2s; }
+.mode-btn.active { background:var(--yellow); color:var(--wood-dark); border-color:var(--yellow); font-weight:700; }
+.mode-btn:hover { opacity:.85; }
+.container { max-width:960px; margin:0 auto; padding:20px 16px 80px; }
+.back-btn { display:inline-block; margin-bottom:16px; padding:6px 16px; background:var(--wood); color:#fff; border-radius:8px; text-decoration:none; font-size:.9em; transition:.2s; }
+.back-btn:hover { background:var(--wood-light); }
+.section { background:var(--board-light); border:1px solid var(--wood); border-radius:12px; padding:24px; margin-bottom:24px; }
+h2 { color:var(--yellow); font-size:1.3em; padding-bottom:6px; border-bottom:2px dashed var(--yellow); margin-bottom:16px; }
+h3 { color:var(--green); font-size:1.1em; margin:14px 0 8px; }
+.objectives { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.obj-chip { background:rgba(129,212,250,.15); color:var(--blue); border:1px solid var(--blue); padding:4px 14px; border-radius:20px; font-size:.85em; }
+table { width:100%; border-collapse:collapse; margin:12px 0; }
+th { background:rgba(255,213,79,.2); color:var(--yellow); }
+th, td { border:1px solid var(--wood); padding:8px 12px; text-align:center; font-size:.95em; }
+td { color:var(--chalk); }
+ul.bullet { list-style:disc; padding-left:24px; margin:8px 0; }
+ul.bullet li { margin-bottom:4px; }
+.note { border-left:4px solid var(--blue); background:rgba(129,212,250,.08); padding:10px 14px; margin:12px 0; border-radius:0 8px 8px 0; font-size:.95em; }
+
+.math-display { background:rgba(0,0,0,.25); border-radius:8px; padding:14px; margin:10px 0; text-align:center; font-size:1.2rem; color:var(--formula); overflow-x:auto; border:1px solid rgba(255,235,59,.25); }
+
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+.step-card { background:rgba(255,213,79,.08); border:1px solid var(--wood); border-radius:10px; padding:14px; text-align:center; }
+.step-num { font-size:1.6em; color:var(--yellow); font-weight:900; }
+.step-title { color:var(--green); font-weight:700; margin:4px 0; }
+.step-desc { font-size:.9em; color:var(--chalk-dim); }
+
+.solve-steps { margin:10px 0; }
+.solve-item { background:rgba(255,213,79,.06); border:1px solid rgba(255,213,79,.3); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+.solve-head { background:none; border:none; width:100%; text-align:left; padding:12px 16px; color:var(--yellow); font-weight:700; cursor:pointer; font-family:inherit; font-size:1em; display:flex; justify-content:space-between; align-items:center; }
+.solve-head::after { content:'▼'; transition:transform .2s; font-size:.85em; }
+.solve-item.open .solve-head::after { transform:rotate(180deg); }
+.solve-body { padding:0 16px; max-height:0; overflow:hidden; transition:max-height .35s, padding .35s; color:var(--chalk); }
+.solve-item.open .solve-body { max-height:600px; padding:8px 16px 16px; }
+.example-q { color:var(--blue); font-weight:600; margin-bottom:8px; }
+.example-a { color:var(--green); font-weight:600; margin-top:8px; }
+
+.obs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:12px 0; }
+.obs-card { background:rgba(165,214,167,.08); border:1px solid var(--green); border-radius:10px; padding:14px; }
+.obs-title { color:var(--orange); font-weight:700; margin-bottom:4px; }
+.obs-desc { font-size:.9em; color:var(--chalk); }
+
+.calc-grid { display:grid; gap:12px; margin:10px 0; }
+.calc-item { background:rgba(165,214,167,.08); border:1px solid rgba(165,214,167,.35); border-radius:10px; padding:14px; }
+.calc-q { color:var(--chalk); font-weight:500; margin-bottom:10px; }
+.calc-input { padding:6px 12px; border:2px solid var(--chalk-dim); border-radius:8px; background:rgba(0,0,0,.3); color:var(--formula); font-family:inherit; font-size:1.05em; width:100px; text-align:center; }
+.calc-unit { color:var(--chalk-dim); margin-left:4px; }
+.calc-btn { padding:6px 16px; border:2px solid var(--yellow); border-radius:8px; background:var(--yellow); color:var(--wood-dark); cursor:pointer; font-family:inherit; font-size:.9em; font-weight:700; margin-left:6px; }
+.calc-feedback { display:inline-block; margin-left:10px; font-size:.95em; font-weight:700; }
+.calc-feedback.correct { color:var(--green); }
+.calc-feedback.wrong { color:var(--pink); }
+
+.quiz-item, .tf-item, .fill-item { margin-bottom:16px; }
+.quiz-q, .tf-q, .fill-q { margin-bottom:8px; font-weight:500; }
+.quiz-opts { display:flex; flex-wrap:wrap; gap:8px; }
+.quiz-opts button, .tf-btns button, .fill-btn { padding:6px 16px; border:2px solid var(--chalk-dim); border-radius:8px; background:transparent; color:var(--chalk); cursor:pointer; font-family:inherit; font-size:.9em; transition:.2s; }
+.quiz-opts button:hover, .tf-btns button:hover, .fill-btn:hover { border-color:var(--yellow); }
+.correct { background:rgba(165,214,167,.3)!important; border-color:var(--green)!important; color:var(--green)!important; }
+.wrong { background:rgba(255,138,128,.3)!important; border-color:var(--pink)!important; color:var(--pink)!important; }
+.tf-btns { display:flex; gap:8px; }
+.fill-item { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.fill-q { flex:1 1 100%; }
+.fill-input { padding:6px 12px; border:2px solid var(--chalk-dim); border-radius:8px; background:transparent; color:var(--yellow); font-family:inherit; font-size:1em; width:120px; text-align:center; }
+.fill-feedback { font-size:.9em; margin-left:4px; }
+
+/* 硬幣按鈕 */
+.coin-buttons { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:14px 0; }
+.coin-btn { width:78px; height:78px; border-radius:50%; border:3px solid var(--wood-dark); cursor:pointer; font-family:inherit; font-weight:900; font-size:1.1em; color:var(--wood-dark); transition:transform .15s, box-shadow .15s; display:flex; align-items:center; justify-content:center; flex-direction:column; box-shadow:0 4px 8px rgba(0,0,0,.4); }
+.coin-btn:hover { transform:translateY(-3px); box-shadow:0 6px 12px rgba(0,0,0,.5); }
+.coin-btn:active { transform:translateY(0); }
+.coin-1 { background:radial-gradient(circle at 30% 30%, #ffd089, #c87f3b); }
+.coin-5 { background:radial-gradient(circle at 30% 30%, #d0d0d0, #888); color:#222; border-color:#444; }
+.coin-10 { background:radial-gradient(circle at 30% 30%, #e8e8e8, #999); color:#222; border-color:#444; }
+.coin-50 { background:radial-gradient(circle at 30% 30%, #ffe18a, #b8860b); }
+.coin-100 { background:radial-gradient(circle at 30% 30%, #c8e6c9, #66bb6a); color:#1b5e20; border-color:#2e7d32; width:96px; height:60px; border-radius:8px; }
+.coin-btn .face { font-size:1.4em; line-height:1; }
+.coin-btn .unit { font-size:.65em; margin-top:2px; }
+
+.pocket-area { background:rgba(141,110,74,.18); border:3px dashed var(--wood-light); border-radius:14px; padding:16px; min-height:160px; margin:14px 0; position:relative; }
+.pocket-label { color:var(--yellow); font-weight:700; margin-bottom:10px; text-align:center; }
+.pocket-total { font-size:2em; color:var(--formula); font-weight:900; text-align:center; margin:8px 0; font-family:'Courier New',monospace; }
+.pocket-svg-wrap { background:#fff; border-radius:10px; padding:12px; margin-top:10px; min-height:120px; display:flex; align-items:center; justify-content:center; }
+.pocket-clear { display:block; margin:10px auto 0; padding:8px 20px; border:2px solid var(--pink); border-radius:8px; background:transparent; color:var(--pink); cursor:pointer; font-family:inherit; font-weight:700; }
+.pocket-clear:hover { background:var(--pink); color:#fff; }
+
+#teacher-only { display:none; }
+.tool-panel{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:400;display:flex;align-items:stretch}
+.tool-toggle{background:var(--wood);color:#fff;border:none;width:28px;border-radius:10px 0 0 10px;cursor:pointer;font-size:.82em;writing-mode:vertical-rl;letter-spacing:3px;padding:14px 4px;box-shadow:-3px 0 12px rgba(0,0,0,.4);transition:background .2s;font-family:inherit}
+.tool-toggle:hover{background:var(--wood-light)}
+.tool-content{background:#162616;border:2px solid rgba(232,228,216,.18);border-right:none;border-radius:12px 0 0 12px;padding:14px 12px;display:none;flex-direction:column;gap:14px;width:164px;box-shadow:-4px 0 20px rgba(0,0,0,.5)}
+.tool-content.open{display:flex}
+.tool-lbl{font-size:.7em;color:var(--chalk-dim);letter-spacing:1px;border-bottom:1px solid rgba(232,228,216,.1);padding-bottom:4px;margin-bottom:2px}
+.font-ctrl{display:flex;align-items:center;gap:6px;justify-content:center}
+.font-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.4);color:var(--yellow);border-radius:6px;width:32px;height:30px;font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.font-btn:hover{background:rgba(255,213,79,.3)}
+.font-val{font-size:.8em;color:var(--chalk-dim);min-width:38px;text-align:center}
+.timer-disp{font-family:'Courier New',monospace;font-size:1.9em;color:var(--yellow);text-align:center;letter-spacing:2px;margin:4px 0}
+.timer-disp.running{color:var(--green)}
+.timer-disp.ended{color:var(--pink);animation:blink .7s infinite}
+@keyframes blink{50%{opacity:.3}}
+.timer-presets{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.timer-preset{background:rgba(129,212,250,.1);border:1px solid rgba(129,212,250,.3);color:var(--blue);border-radius:6px;padding:3px 7px;font-size:.72em;cursor:pointer;font-family:inherit}
+.timer-preset:hover{background:rgba(129,212,250,.25)}
+.timer-btns{display:flex;gap:4px;justify-content:center}
+.timer-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.3);color:var(--yellow);border-radius:6px;padding:4px 0;font-size:.82em;cursor:pointer;flex:1;font-family:inherit}
+.timer-btn:hover{background:rgba(255,213,79,.3)}
+.timer-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+.draw-btn{background:rgba(232,228,216,.1);border:1px solid rgba(232,228,216,.2);color:var(--chalk);border-radius:6px;padding:5px 0;font-size:.78em;cursor:pointer;width:100%;text-align:center;font-family:inherit}
+.draw-btn:hover{background:rgba(232,228,216,.2)}
+.draw-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+.draw-colors{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.draw-color{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+.draw-color:hover,.draw-color.active{transform:scale(1.3);border-color:white}
+.draw-sizes{display:flex;gap:6px;justify-content:center;align-items:center}
+.draw-size{border-radius:50%;background:var(--chalk);cursor:pointer;transition:transform .15s;border:2px solid transparent}
+.draw-size.active{border-color:var(--yellow);transform:scale(1.2)}
+#draw-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:350;display:none;cursor:crosshair;touch-action:none}
+#draw-canvas.active{display:block}
+.carousel{position:relative;background:#000;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.carousel img{width:100%;display:none;border-radius:10px}
+.carousel img.active{display:block}
+.carousel-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:none;font-size:1.5rem;padding:8px 14px;cursor:pointer;border-radius:8px;z-index:10}
+.carousel-nav.prev{left:8px}
+.carousel-nav.next{right:8px}
+.placeholder-box { background:rgba(0,0,0,.3); border:2px dashed var(--chalk-dim); border-radius:10px; padding:30px; text-align:center; color:var(--chalk-dim); }
+</style>
+</head>
+<body>
+<canvas id="draw-canvas"></canvas>
+
+<div class="tool-panel">
+  <div class="tool-content" id="tool-content">
+    <div>
+      <div class="tool-lbl">字　級</div>
+      <div class="font-ctrl" style="margin-top:6px">
+        <button class="font-btn" id="font-dec">A−</button>
+        <span class="font-val" id="font-val">18px</span>
+        <button class="font-btn" id="font-inc">A＋</button>
+      </div>
+    </div>
+    <div>
+      <div class="tool-lbl">計時器</div>
+      <div class="timer-disp" id="timer-disp">05:00</div>
+      <div class="timer-presets">
+        <button class="timer-preset" data-sec="60">1分</button>
+        <button class="timer-preset" data-sec="180">3分</button>
+        <button class="timer-preset" data-sec="300">5分</button>
+        <button class="timer-preset" data-sec="600">10分</button>
+      </div>
+      <div class="timer-btns" style="margin-top:6px">
+        <button class="timer-btn" id="timer-start">▶ 開始</button>
+        <button class="timer-btn" id="timer-reset">↺ 重置</button>
+      </div>
+    </div>
+    <div>
+      <div class="tool-lbl">畫　筆</div>
+      <button class="draw-btn" id="draw-toggle" style="margin:6px 0">🖌️ 開啟畫筆</button>
+      <div class="draw-colors" style="margin-bottom:6px">
+        <div class="draw-color active" data-color="#ffd54f" style="background:#ffd54f"></div>
+        <div class="draw-color" data-color="#ff8a80" style="background:#ff8a80"></div>
+        <div class="draw-color" data-color="#81d4fa" style="background:#81d4fa"></div>
+        <div class="draw-color" data-color="#a5d6a7" style="background:#a5d6a7"></div>
+        <div class="draw-color" data-color="#ffffff" style="background:#fff;border:1px solid #666"></div>
+      </div>
+      <div class="draw-sizes" style="margin-bottom:6px">
+        <div class="draw-size" data-size="3" style="width:8px;height:8px"></div>
+        <div class="draw-size active" data-size="7" style="width:14px;height:14px"></div>
+        <div class="draw-size" data-size="14" style="width:22px;height:22px"></div>
+      </div>
+      <button class="draw-btn" id="draw-clear">🗑️ 清除畫布</button>
+    </div>
+  </div>
+  <button class="tool-toggle" id="tool-toggle">工具</button>
+</div>
+
+<header>
+  <h1>💰 第 6 單元｜數數看有多少元 <span class="badge">小一數學</span></h1>
+</header>
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('student')">學生模式</button>
+  <button class="mode-btn" onclick="setMode('teacher')">教師模式</button>
+</div>
+<div class="container">
+  <a href="../index.html" class="back-btn">← 返回總覽</a>
+
+  <div class="objectives">
+    <span class="obj-chip">認識 1、5、10、50 元硬幣</span>
+    <span class="obj-chip">認識 100 元紙鈔</span>
+    <span class="obj-chip">會算硬幣的總額</span>
+    <span class="obj-chip">會計算找錢</span>
+  </div>
+
+  <!-- 核心 -->
+  <div class="section">
+    <h2>📐 核心觀念</h2>
+    <h3>認識錢幣</h3>
+    <table>
+      <tr><th>幣別</th><th>外觀</th><th>幾元</th></tr>
+      <tr><td>1 元硬幣</td><td>銅色、最小</td><td>1 元</td></tr>
+      <tr><td>5 元硬幣</td><td>銀色、中小</td><td>5 元</td></tr>
+      <tr><td>10 元硬幣</td><td>銀色、中大</td><td>10 元</td></tr>
+      <tr><td>50 元硬幣</td><td>金色、最大</td><td>50 元</td></tr>
+      <tr><td>100 元紙鈔</td><td>紅色紙鈔</td><td>100 元</td></tr>
+    </table>
+    <h3>算總額</h3>
+    <div class="note">把每個硬幣的錢「加起來」，例如 3 個 10 元 + 2 個 5 元 = 40 元</div>
+    <h3>找錢</h3>
+    <div class="math-display">$$\text{找錢} = \text{付的錢} - \text{物品的錢}$$</div>
+  </div>
+
+  <!-- 解題步驟 Accordion -->
+  <div class="section">
+    <h2>💡 解題步驟（點開展開）</h2>
+    <div class="solve-steps">
+      <div class="solve-item">
+        <button class="solve-head" onclick="toggleSolve(this)">例題 1：算總額（3 個 10 元 + 2 個 5 元）</button>
+        <div class="solve-body">
+          <div class="example-q">小明的撲滿裡有 3 個 10 元和 2 個 5 元，一共有多少錢？</div>
+          <ol style="padding-left:24px">
+            <li>先算 10 元的總和：$10 + 10 + 10 = 30$ 元</li>
+            <li>再算 5 元的總和：$5 + 5 = 10$ 元</li>
+            <li>兩個總和相加：$30 + 10 = 40$ 元</li>
+          </ol>
+          <div class="example-a">答：一共有 40 元</div>
+        </div>
+      </div>
+
+      <div class="solve-item">
+        <button class="solve-head" onclick="toggleSolve(this)">例題 2：找錢（付 50 元買 30 元糖果）</button>
+        <div class="solve-body">
+          <div class="example-q">小華拿 50 元去買 30 元的糖果，應該找回多少錢？</div>
+          <ol style="padding-left:24px">
+            <li>套公式：$\text{找錢} = \text{付的錢} - \text{物品的錢}$</li>
+            <li>代入：$50 - 30$</li>
+            <li>計算：$50 - 30 = 20$ 元</li>
+          </ol>
+          <div class="example-a">答：應該找回 20 元</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互動計算題 -->
+  <div class="section">
+    <h2>🧮 互動計算題（馬上試試看）</h2>
+    <p style="color:var(--chalk-dim);font-size:.9em;margin-bottom:12px">輸入答案後按「確認」，會立刻檢查對錯。</p>
+    <div class="calc-grid">
+      <div class="calc-item">
+        <div class="calc-q">1. 5 個 10 元，一共多少元？</div>
+        <input class="calc-input" data-ans="50" placeholder="?"><span class="calc-unit">元</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">2. 1 個 50 元加 2 個 10 元，一共多少元？</div>
+        <input class="calc-input" data-ans="70" placeholder="?"><span class="calc-unit">元</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">3. 我有 80 元，買了 35 元的東西，還剩多少元？</div>
+        <input class="calc-input" data-ans="45" placeholder="?"><span class="calc-unit">元</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">4. 餅乾 15 元、飲料 20 元，一共多少元？</div>
+        <input class="calc-input" data-ans="35" placeholder="?"><span class="calc-unit">元</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互動實驗：往口袋丟硬幣 -->
+  <div class="section">
+    <h2>🎮 互動實驗：往口袋丟硬幣</h2>
+    <p style="color:var(--chalk-dim);font-size:.9em;margin-bottom:14px">點下面的硬幣按鈕，硬幣會掉進口袋，口袋裡的總金額會自動加起來！</p>
+
+    <div class="coin-buttons">
+      <button class="coin-btn coin-1" onclick="addCoin(1)"><span class="face">1</span><span class="unit">元</span></button>
+      <button class="coin-btn coin-5" onclick="addCoin(5)"><span class="face">5</span><span class="unit">元</span></button>
+      <button class="coin-btn coin-10" onclick="addCoin(10)"><span class="face">10</span><span class="unit">元</span></button>
+      <button class="coin-btn coin-50" onclick="addCoin(50)"><span class="face">50</span><span class="unit">元</span></button>
+      <button class="coin-btn coin-100" onclick="addCoin(100)"><span class="face">100</span><span class="unit">元</span></button>
+    </div>
+
+    <div class="pocket-area">
+      <div class="pocket-label">👖 我的口袋</div>
+      <div class="pocket-total">總金額：<span id="pocket-total">0</span> 元</div>
+      <div class="pocket-svg-wrap">
+        <svg id="pocket-svg" width="100%" viewBox="0 0 480 140" style="max-width:560px"></svg>
+      </div>
+      <button class="pocket-clear" onclick="clearPocket()">🗑️ 清空口袋</button>
+    </div>
+
+    <p style="color:var(--chalk-dim);font-size:.85em;margin-top:8px">💡 小發現：不同的硬幣加在一起，可以湊成各種金額！</p>
+  </div>
+
+  <!-- 形成性評量 -->
+  <div class="section">
+    <h2>✅ 形成性評量</h2>
+
+    <h3>選擇題</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">1. 50 元等於幾個 10 元？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. 2 個</button>
+        <button onclick="checkQ(this,'wrong')">B. 4 個</button>
+        <button onclick="checkQ(this,'correct')">C. 5 個</button>
+        <button onclick="checkQ(this,'wrong')">D. 10 個</button>
+      </div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">2. 找錢的公式是？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. 付的錢 + 物品的錢</button>
+        <button onclick="checkQ(this,'correct')">B. 付的錢 − 物品的錢</button>
+        <button onclick="checkQ(this,'wrong')">C. 物品的錢 − 付的錢</button>
+        <button onclick="checkQ(this,'wrong')">D. 物品的錢 × 付的錢</button>
+      </div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">3. 1、5、10、50 元硬幣中，哪一個面額最大？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. 1 元</button>
+        <button onclick="checkQ(this,'wrong')">B. 5 元</button>
+        <button onclick="checkQ(this,'wrong')">C. 10 元</button>
+        <button onclick="checkQ(this,'correct')">D. 50 元</button>
+      </div>
+    </div>
+
+    <h3>是非題</h3>
+    <div class="tf-item">
+      <div class="tf-q">1. 50 元硬幣和 5 元硬幣的面額是一樣大的</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'wrong')">○ 對</button>
+        <button onclick="checkTF(this,'correct')">✗ 錯</button>
+      </div>
+    </div>
+    <div class="tf-item">
+      <div class="tf-q">2. 1 個 50 元等於 10 個 5 元</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'correct')">○ 對</button>
+        <button onclick="checkTF(this,'wrong')">✗ 錯</button>
+      </div>
+    </div>
+    <div class="tf-item">
+      <div class="tf-q">3. 找錢的時候，要把付的錢和物品的錢「加起來」</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'wrong')">○ 對</button>
+        <button onclick="checkTF(this,'correct')">✗ 錯</button>
+      </div>
+    </div>
+
+    <h3>填空題</h3>
+    <div class="fill-item">
+      <div class="fill-q">1. 3 個 50 元一共是 ___ 元</div>
+      <input class="fill-input" data-ans="150" placeholder="？">
+      <button class="fill-btn" onclick="checkFill(this)">確認</button>
+      <span class="fill-feedback"></span>
+    </div>
+    <div class="fill-item">
+      <div class="fill-q">2. 拿 100 元去買 65 元的東西，要找回 ___ 元</div>
+      <input class="fill-input" data-ans="35" placeholder="？">
+      <button class="fill-btn" onclick="checkFill(this)">確認</button>
+      <span class="fill-feedback"></span>
+    </div>
+  </div>
+
+  <!-- 簡報 placeholder -->
+  <div class="section">
+    <h2>📊 授課簡報</h2>
+    <div class="placeholder-box">
+      <p>📎 簡報尚未上傳</p>
+      <p style="font-size:.85em;margin-top:6px">待 NotebookLM 生成 U6 授課簡報後嵌入此處</p>
+    </div>
+  </div>
+
+  <!-- 影片 placeholder -->
+  <div class="section">
+    <h2>🎬 學生自學影片</h2>
+    <div class="placeholder-box">
+      <p>📹 影片尚未上傳</p>
+      <p style="font-size:.85em;margin-top:6px">待 NotebookLM 生成 U6 自學影片後上傳 YouTube unlisted</p>
+    </div>
+  </div>
+
+  <!-- 教師模式 -->
+  <div id="teacher-only">
+    <div class="section">
+      <h2>👩‍🏫 教師備課區</h2>
+      <h3>教學策略</h3>
+      <ul class="bullet">
+        <li>準備真實硬幣（或仿真教具）讓學生實際觸摸、辨認大小與顏色</li>
+        <li>在教室角落開設「小商店」，準備標好價錢的商品讓學生輪流當老闆與顧客</li>
+        <li>角色扮演：付錢、收錢、找錢的完整流程，加深印象</li>
+        <li>用「換錢遊戲」練習等值換算（1 個 50 元 = 5 個 10 元 = 10 個 5 元）</li>
+        <li>從家裡帶發票或購物收據，討論實際消費場景</li>
+      </ul>
+      <h3>Bloom 認知層次</h3>
+      <table>
+        <tr><th>層次</th><th>學習表現</th></tr>
+        <tr><td style="color:var(--blue)">記憶理解</td><td>說出 1、5、10、50 元硬幣和 100 元紙鈔的外觀與面額</td></tr>
+        <tr><td style="color:var(--green)">應用</td><td>計算多個硬幣的總額、計算簡單的找錢（互動計算題 4 題）</td></tr>
+        <tr><td style="color:var(--orange)">分析</td><td>判斷哪幾種硬幣的組合可以湊成指定金額，比較不同組合的便利性</td></tr>
+      </table>
+      <h3>易錯點提醒</h3>
+      <ul class="bullet">
+        <li style="color:var(--pink)">50 元和 5 元混淆：兩者都是金色／銀色易看錯，要強調「大小不同」</li>
+        <li style="color:var(--pink)">漏算硬幣：算總額時跳過一個硬幣不算進去</li>
+        <li style="color:var(--pink)">找錢方向錯誤：用「物品的錢 − 付的錢」變成負數</li>
+        <li style="color:var(--pink)">忘記寫單位「元」，只寫數字</li>
+        <li style="color:var(--pink)">把「1 個 50 元」誤算成「50 個 1 元」的金額</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// 右側工具面板
+document.getElementById('tool-toggle').onclick=function(){document.getElementById('tool-content').classList.toggle('open');};
+var fsize=18;
+function setFsize(n){fsize=Math.min(28,Math.max(12,n));document.body.style.fontSize=fsize+'px';document.getElementById('font-val').textContent=fsize+'px';}
+document.getElementById('font-inc').onclick=function(){setFsize(fsize+2);};
+document.getElementById('font-dec').onclick=function(){setFsize(fsize-2);};
+
+// 計時器
+var tSec=300,tRunning=false,tInterval=null;
+var tDisp=document.getElementById('timer-disp');
+var tStart=document.getElementById('timer-start');
+function tFmt(s){var m=Math.floor(s/60),sc=s%60;return(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;}
+function tTick(){if(tSec<=0){clearInterval(tInterval);tRunning=false;tDisp.textContent='00:00';tDisp.className='timer-disp ended';tStart.textContent='▶ 開始';tStart.classList.remove('on');return;}tSec--;tDisp.textContent=tFmt(tSec);}
+tStart.onclick=function(){if(tRunning){clearInterval(tInterval);tRunning=false;tDisp.classList.remove('running');this.textContent='▶ 開始';this.classList.remove('on');}else{tInterval=setInterval(tTick,1000);tRunning=true;tDisp.className='timer-disp running';this.textContent='⏸ 暫停';this.classList.add('on');}};
+document.getElementById('timer-reset').onclick=function(){clearInterval(tInterval);tRunning=false;tDisp.className='timer-disp';tStart.textContent='▶ 開始';tStart.classList.remove('on');tDisp.textContent=tFmt(tSec);};
+document.querySelectorAll('.timer-preset').forEach(function(btn){btn.onclick=function(){clearInterval(tInterval);tRunning=false;tSec=parseInt(this.dataset.sec);tDisp.className='timer-disp';tDisp.textContent=tFmt(tSec);tStart.textContent='▶ 開始';tStart.classList.remove('on');}});
+
+// 畫筆 canvas
+var canvas=document.getElementById('draw-canvas');
+var ctx=canvas.getContext('2d');
+var drawOn=false,drawing=false,dColor='#ffd54f',dSize=7;
+function resizeCanvas(){var data=ctx.getImageData(0,0,canvas.width||1,canvas.height||1);canvas.width=window.innerWidth;canvas.height=window.innerHeight;ctx.putImageData(data,0,0);ctx.lineCap='round';ctx.lineJoin='round';}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+document.getElementById('draw-toggle').onclick=function(){drawOn=!drawOn;canvas.classList.toggle('active',drawOn);this.textContent=drawOn?'✅ 關閉畫筆':'🖌️ 開啟畫筆';this.classList.toggle('on',drawOn);};
+document.getElementById('draw-clear').onclick=function(){ctx.clearRect(0,0,canvas.width,canvas.height);};
+document.querySelectorAll('.draw-color').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-color').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dColor=this.dataset.color;}});
+document.querySelectorAll('.draw-size').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-size').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dSize=parseInt(this.dataset.size);}});
+function pos(e){var r=canvas.getBoundingClientRect();if(e.touches)return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};return{x:e.clientX-r.left,y:e.clientY-r.top};}
+canvas.addEventListener('mousedown',function(e){drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;});
+canvas.addEventListener('mousemove',function(e){if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+canvas.addEventListener('mouseup',function(){drawing=false;});
+canvas.addEventListener('mouseleave',function(){drawing=false;});
+canvas.addEventListener('touchstart',function(e){e.preventDefault();drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;},{passive:false});
+canvas.addEventListener('touchmove',function(e){e.preventDefault();if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+canvas.addEventListener('touchend',function(){drawing=false;});
+
+function setMode(m){
+  document.querySelectorAll('.mode-btn').forEach(function(b,i){
+    b.classList.toggle('active', (m==='student'&&i===0)||(m==='teacher'&&i===1));
+  });
+  document.getElementById('teacher-only').style.display = m==='teacher'?'block':'none';
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+function toggleSolve(btn){
+  btn.parentNode.classList.toggle('open');
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+function checkQ(btn,result){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(result);
+}
+function checkTF(btn,result){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(result);
+}
+function checkFill(btn){
+  var input = btn.previousElementSibling;
+  var fb = btn.nextElementSibling;
+  var ans = input.getAttribute('data-ans');
+  if(input.value.trim() === ans){
+    fb.textContent='✔ 正確！'; fb.style.color='var(--green)';
+    input.style.borderColor='var(--green)';
+  } else {
+    fb.textContent='✘ 再想想，答案是 '+ans; fb.style.color='var(--pink)';
+    input.style.borderColor='var(--pink)';
+  }
+}
+function checkCalc(btn){
+  var item = btn.closest('.calc-item');
+  var input = item.querySelector('.calc-input');
+  var fb = item.querySelector('.calc-feedback');
+  var raw = input.value.trim();
+  var ans = input.dataset.ans;
+  var ok = (raw === ans);
+  if (!ok) {
+    var rawNum = parseFloat(raw), ansNum = parseFloat(ans);
+    if (!isNaN(rawNum) && !isNaN(ansNum) && Math.abs(rawNum - ansNum) < 0.01) ok = true;
+  }
+  fb.textContent = ok ? '✓ 答對了！' : '✗ 正確答案：' + ans;
+  fb.className = 'calc-feedback ' + (ok ? 'correct' : 'wrong');
+  input.style.borderColor = ok ? 'var(--green)' : 'var(--pink)';
+}
+
+// 互動口袋
+var pocketCoins = [];
+var coinStyles = {
+  1:   {fill:'#c87f3b', stroke:'#5d3a14', text:'1',   tc:'#fff', r:18},
+  5:   {fill:'#999',    stroke:'#444',    text:'5',   tc:'#222', r:20},
+  10:  {fill:'#bbb',    stroke:'#444',    text:'10',  tc:'#222', r:23},
+  50:  {fill:'#d4a017', stroke:'#7a5b00', text:'50',  tc:'#fff', r:26},
+  100: {fill:'#66bb6a', stroke:'#2e7d32', text:'100', tc:'#fff', r:0, isBill:true}
+};
+function addCoin(v){
+  pocketCoins.push(v);
+  renderPocket();
+}
+function clearPocket(){
+  pocketCoins = [];
+  renderPocket();
+}
+function renderPocket(){
+  var total = pocketCoins.reduce(function(a,b){return a+b;}, 0);
+  document.getElementById('pocket-total').textContent = total;
+  var svg = document.getElementById('pocket-svg');
+  var items = '';
+  var coinX = 30, coinY = 80;
+  var billX = 30, billY = 25;
+  pocketCoins.forEach(function(v){
+    var s = coinStyles[v];
+    if (s.isBill) {
+      items += '<rect x="'+billX+'" y="'+billY+'" width="76" height="38" rx="4" fill="'+s.fill+'" stroke="'+s.stroke+'" stroke-width="2"/>';
+      items += '<text x="'+(billX+38)+'" y="'+(billY+25)+'" text-anchor="middle" fill="'+s.tc+'" font-size="16" font-weight="900" font-family="inherit">100</text>';
+      billX += 20;
+      if (billX > 380) { billX = 30; billY += 12; }
+    } else {
+      items += '<circle cx="'+coinX+'" cy="'+coinY+'" r="'+s.r+'" fill="'+s.fill+'" stroke="'+s.stroke+'" stroke-width="2"/>';
+      items += '<text x="'+coinX+'" y="'+(coinY+5)+'" text-anchor="middle" fill="'+s.tc+'" font-size="13" font-weight="900" font-family="inherit">'+s.text+'</text>';
+      coinX += 18;
+      if (coinX > 440) { coinX = 30; coinY += 14; }
+    }
+  });
+  if (pocketCoins.length === 0) {
+    items = '<text x="240" y="75" text-anchor="middle" fill="#999" font-size="14" font-family="inherit">（口袋是空的，點上面的硬幣丟進來吧！）</text>';
+  }
+  svg.innerHTML = items;
+}
+renderPocket();
+</script>
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第5單元：形狀與形體</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --board:#1a2a1a; --board-light:#243524; --chalk:#e8e4d8; --chalk-dim:#a8a498;
+  --yellow:#ffd54f; --wood:#8d6e4a; --wood-dark:#5d4530; --wood-light:#a8875a;
+  --pink:#ff8a80; --blue:#81d4fa; --green:#a5d6a7; --orange:#ffb74d; --purple:#ce93d8;
+  --formula:#ffeb3b;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Noto Sans TC',sans-serif; background:var(--board); color:var(--chalk); line-height:1.8; font-size:18px; }
+header { position:sticky; top:0; z-index:100; background:linear-gradient(180deg,var(--wood-light),var(--wood),var(--wood-dark)); border-bottom:4px solid var(--wood-dark); text-align:center; padding:12px 16px; box-shadow:0 4px 12px rgba(0,0,0,.5); }
+header h1 { font-size:1.6em; color:#fff; text-shadow:1px 1px 3px rgba(0,0,0,.6); }
+header .badge { display:inline-block; background:var(--yellow); color:var(--wood-dark); font-size:.5em; padding:2px 10px; border-radius:12px; margin-left:8px; vertical-align:middle; font-weight:700; }
+.mode-bar { display:flex; justify-content:center; gap:8px; background:var(--board-light); padding:8px; border-bottom:2px solid var(--wood-dark); }
+.mode-btn { padding:6px 20px; border:2px solid var(--chalk-dim); border-radius:20px; background:transparent; color:var(--chalk-dim); cursor:pointer; font-family:inherit; font-size:.9em; transition:.2s; }
+.mode-btn.active { background:var(--yellow); color:var(--wood-dark); border-color:var(--yellow); font-weight:700; }
+.mode-btn:hover { opacity:.85; }
+.container { max-width:960px; margin:0 auto; padding:20px 16px 80px; }
+.back-btn { display:inline-block; margin-bottom:16px; padding:6px 16px; background:var(--wood); color:#fff; border-radius:8px; text-decoration:none; font-size:.9em; transition:.2s; }
+.back-btn:hover { background:var(--wood-light); }
+.section { background:var(--board-light); border:1px solid var(--wood); border-radius:12px; padding:24px; margin-bottom:24px; }
+h2 { color:var(--yellow); font-size:1.3em; padding-bottom:6px; border-bottom:2px dashed var(--yellow); margin-bottom:16px; }
+h3 { color:var(--green); font-size:1.1em; margin:14px 0 8px; }
+.objectives { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.obj-chip { background:rgba(129,212,250,.15); color:var(--blue); border:1px solid var(--blue); padding:4px 14px; border-radius:20px; font-size:.85em; }
+table { width:100%; border-collapse:collapse; margin:12px 0; }
+th { background:rgba(255,213,79,.2); color:var(--yellow); }
+th, td { border:1px solid var(--wood); padding:8px 12px; text-align:center; font-size:.95em; }
+td { color:var(--chalk); }
+ul.bullet { list-style:disc; padding-left:24px; margin:8px 0; }
+ul.bullet li { margin-bottom:4px; }
+.note { border-left:4px solid var(--blue); background:rgba(129,212,250,.08); padding:10px 14px; margin:12px 0; border-radius:0 8px 8px 0; font-size:.95em; }
+
+.math-display { background:rgba(0,0,0,.25); border-radius:8px; padding:14px; margin:10px 0; text-align:center; font-size:1.2rem; color:var(--formula); overflow-x:auto; border:1px solid rgba(255,235,59,.25); }
+
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+.step-card { background:rgba(255,213,79,.08); border:1px solid var(--wood); border-radius:10px; padding:14px; text-align:center; }
+.step-num { font-size:1.6em; color:var(--yellow); font-weight:900; }
+.step-title { color:var(--green); font-weight:700; margin:4px 0; }
+.step-desc { font-size:.9em; color:var(--chalk-dim); }
+
+.solve-steps { margin:10px 0; }
+.solve-item { background:rgba(255,213,79,.06); border:1px solid rgba(255,213,79,.3); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+.solve-head { background:none; border:none; width:100%; text-align:left; padding:12px 16px; color:var(--yellow); font-weight:700; cursor:pointer; font-family:inherit; font-size:1em; display:flex; justify-content:space-between; align-items:center; }
+.solve-head::after { content:'▼'; transition:transform .2s; font-size:.85em; }
+.solve-item.open .solve-head::after { transform:rotate(180deg); }
+.solve-body { padding:0 16px; max-height:0; overflow:hidden; transition:max-height .35s, padding .35s; color:var(--chalk); }
+.solve-item.open .solve-body { max-height:600px; padding:8px 16px 16px; }
+.example-q { color:var(--blue); font-weight:600; margin-bottom:8px; }
+.example-a { color:var(--green); font-weight:600; margin-top:8px; }
+
+.obs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:12px 0; }
+.obs-card { background:rgba(165,214,167,.08); border:1px solid var(--green); border-radius:10px; padding:14px; }
+.obs-title { color:var(--orange); font-weight:700; margin-bottom:4px; }
+.obs-desc { font-size:.9em; color:var(--chalk); }
+
+/* 形狀展示卡 */
+.shape-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin:12px 0; }
+.shape-card { background:rgba(129,212,250,.08); border:1px solid var(--blue); border-radius:10px; padding:14px; text-align:center; }
+.shape-card svg { display:block; margin:0 auto 8px; }
+.shape-name { color:var(--yellow); font-weight:700; font-size:1.05em; }
+.shape-info { color:var(--chalk-dim); font-size:.85em; margin-top:4px; }
+
+/* 互動計算題 */
+.calc-grid { display:grid; gap:12px; margin:10px 0; }
+.calc-item { background:rgba(165,214,167,.08); border:1px solid rgba(165,214,167,.35); border-radius:10px; padding:14px; }
+.calc-q { color:var(--chalk); font-weight:500; margin-bottom:10px; }
+.calc-input { padding:6px 12px; border:2px solid var(--chalk-dim); border-radius:8px; background:rgba(0,0,0,.3); color:var(--formula); font-family:inherit; font-size:1.05em; width:100px; text-align:center; }
+.calc-unit { color:var(--chalk-dim); margin-left:4px; }
+.calc-btn { padding:6px 16px; border:2px solid var(--yellow); border-radius:8px; background:var(--yellow); color:var(--wood-dark); cursor:pointer; font-family:inherit; font-size:.9em; font-weight:700; margin-left:6px; }
+.calc-feedback { display:inline-block; margin-left:10px; font-size:.95em; font-weight:700; }
+.calc-feedback.correct { color:var(--green); }
+.calc-feedback.wrong { color:var(--pink); }
+
+.quiz-item, .tf-item, .fill-item { margin-bottom:16px; }
+.quiz-q, .tf-q, .fill-q { margin-bottom:8px; font-weight:500; }
+.quiz-opts { display:flex; flex-wrap:wrap; gap:8px; }
+.quiz-opts button, .tf-btns button, .fill-btn { padding:6px 16px; border:2px solid var(--chalk-dim); border-radius:8px; background:transparent; color:var(--chalk); cursor:pointer; font-family:inherit; font-size:.9em; transition:.2s; }
+.quiz-opts button:hover, .tf-btns button:hover, .fill-btn:hover { border-color:var(--yellow); }
+.correct { background:rgba(165,214,167,.3)!important; border-color:var(--green)!important; color:var(--green)!important; }
+.wrong { background:rgba(255,138,128,.3)!important; border-color:var(--pink)!important; color:var(--pink)!important; }
+.tf-btns { display:flex; gap:8px; }
+.fill-item { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.fill-q { flex:1 1 100%; }
+.fill-input { padding:6px 12px; border:2px solid var(--chalk-dim); border-radius:8px; background:transparent; color:var(--yellow); font-family:inherit; font-size:1em; width:120px; text-align:center; }
+.fill-feedback { font-size:.9em; margin-left:4px; }
+
+#teacher-only { display:none; }
+
+.tool-panel{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:400;display:flex;align-items:stretch}
+.tool-toggle{background:var(--wood);color:#fff;border:none;width:28px;border-radius:10px 0 0 10px;cursor:pointer;font-size:.82em;writing-mode:vertical-rl;letter-spacing:3px;padding:14px 4px;box-shadow:-3px 0 12px rgba(0,0,0,.4);transition:background .2s;font-family:inherit}
+.tool-toggle:hover{background:var(--wood-light)}
+.tool-content{background:#162616;border:2px solid rgba(232,228,216,.18);border-right:none;border-radius:12px 0 0 12px;padding:14px 12px;display:none;flex-direction:column;gap:14px;width:164px;box-shadow:-4px 0 20px rgba(0,0,0,.5)}
+.tool-content.open{display:flex}
+.tool-lbl{font-size:.7em;color:var(--chalk-dim);letter-spacing:1px;border-bottom:1px solid rgba(232,228,216,.1);padding-bottom:4px;margin-bottom:2px}
+.font-ctrl{display:flex;align-items:center;gap:6px;justify-content:center}
+.font-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.4);color:var(--yellow);border-radius:6px;width:32px;height:30px;font-size:1em;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.font-btn:hover{background:rgba(255,213,79,.3)}
+.font-val{font-size:.8em;color:var(--chalk-dim);min-width:38px;text-align:center}
+.timer-disp{font-family:'Courier New',monospace;font-size:1.9em;color:var(--yellow);text-align:center;letter-spacing:2px;margin:4px 0}
+.timer-disp.running{color:var(--green)}
+.timer-disp.ended{color:var(--pink);animation:blink .7s infinite}
+@keyframes blink{50%{opacity:.3}}
+.timer-presets{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.timer-preset{background:rgba(129,212,250,.1);border:1px solid rgba(129,212,250,.3);color:var(--blue);border-radius:6px;padding:3px 7px;font-size:.72em;cursor:pointer;font-family:inherit}
+.timer-preset:hover{background:rgba(129,212,250,.25)}
+.timer-btns{display:flex;gap:4px;justify-content:center}
+.timer-btn{background:rgba(255,213,79,.15);border:1px solid rgba(255,213,79,.3);color:var(--yellow);border-radius:6px;padding:4px 0;font-size:.82em;cursor:pointer;flex:1;font-family:inherit}
+.timer-btn:hover{background:rgba(255,213,79,.3)}
+.timer-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+.draw-btn{background:rgba(232,228,216,.1);border:1px solid rgba(232,228,216,.2);color:var(--chalk);border-radius:6px;padding:5px 0;font-size:.78em;cursor:pointer;width:100%;text-align:center;font-family:inherit}
+.draw-btn:hover{background:rgba(232,228,216,.2)}
+.draw-btn.on{background:rgba(165,214,167,.2);border-color:var(--green);color:var(--green)}
+.draw-colors{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.draw-color{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s}
+.draw-color:hover,.draw-color.active{transform:scale(1.3);border-color:white}
+.draw-sizes{display:flex;gap:6px;justify-content:center;align-items:center}
+.draw-size{border-radius:50%;background:var(--chalk);cursor:pointer;transition:transform .15s;border:2px solid transparent}
+.draw-size.active{border-color:var(--yellow);transform:scale(1.2)}
+#draw-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:350;display:none;cursor:crosshair;touch-action:none}
+#draw-canvas.active{display:block}
+.carousel{position:relative;background:#000;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.carousel img{width:100%;display:none;border-radius:10px}
+.carousel img.active{display:block}
+.carousel-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:none;font-size:1.5rem;padding:8px 14px;cursor:pointer;border-radius:8px;z-index:10}
+.carousel-nav.prev{left:8px}
+.carousel-nav.next{right:8px}
+.carousel-count{text-align:center;font-size:.85rem;color:var(--chalk-dim);margin-top:6px}
+.placeholder-box{background:rgba(0,0,0,.3);border:2px dashed var(--chalk-dim);border-radius:10px;padding:30px;text-align:center;color:var(--chalk-dim);font-size:.95em}
+</style>
+</head>
+<body>
+<canvas id="draw-canvas"></canvas>
+
+<div class="tool-panel">
+  <div class="tool-content" id="tool-content">
+    <div>
+      <div class="tool-lbl">字　級</div>
+      <div class="font-ctrl" style="margin-top:6px">
+        <button class="font-btn" id="font-dec">A−</button>
+        <span class="font-val" id="font-val">18px</span>
+        <button class="font-btn" id="font-inc">A＋</button>
+      </div>
+    </div>
+    <div>
+      <div class="tool-lbl">計時器</div>
+      <div class="timer-disp" id="timer-disp">05:00</div>
+      <div class="timer-presets">
+        <button class="timer-preset" data-sec="60">1分</button>
+        <button class="timer-preset" data-sec="180">3分</button>
+        <button class="timer-preset" data-sec="300">5分</button>
+        <button class="timer-preset" data-sec="600">10分</button>
+      </div>
+      <div class="timer-btns" style="margin-top:6px">
+        <button class="timer-btn" id="timer-start">▶ 開始</button>
+        <button class="timer-btn" id="timer-reset">↺ 重置</button>
+      </div>
+    </div>
+    <div>
+      <div class="tool-lbl">畫　筆</div>
+      <button class="draw-btn" id="draw-toggle" style="margin:6px 0">🖌️ 開啟畫筆</button>
+      <div class="draw-colors" style="margin-bottom:6px">
+        <div class="draw-color active" data-color="#ffd54f" style="background:#ffd54f"></div>
+        <div class="draw-color" data-color="#ff8a80" style="background:#ff8a80"></div>
+        <div class="draw-color" data-color="#81d4fa" style="background:#81d4fa"></div>
+        <div class="draw-color" data-color="#a5d6a7" style="background:#a5d6a7"></div>
+        <div class="draw-color" data-color="#ffffff" style="background:#fff;border:1px solid #666"></div>
+      </div>
+      <div class="draw-sizes" style="margin-bottom:6px">
+        <div class="draw-size" data-size="3" style="width:8px;height:8px"></div>
+        <div class="draw-size active" data-size="7" style="width:14px;height:14px"></div>
+        <div class="draw-size" data-size="14" style="width:22px;height:22px"></div>
+      </div>
+      <button class="draw-btn" id="draw-clear">🗑️ 清除畫布</button>
+    </div>
+  </div>
+  <button class="tool-toggle" id="tool-toggle">工具</button>
+</div>
+
+<header>
+  <h1>🔷 第 5 單元｜形狀與形體 <span class="badge">小一數學</span></h1>
+</header>
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('student')">學生模式</button>
+  <button class="mode-btn" onclick="setMode('teacher')">教師模式</button>
+</div>
+<div class="container">
+  <a href="../index.html" class="back-btn">← 返回總覽</a>
+
+  <div class="objectives">
+    <span class="obj-chip">認識平面圖形（圓/三角/正方/長方）</span>
+    <span class="obj-chip">認識立體形體（球/圓柱/長方體/正方體）</span>
+    <span class="obj-chip">說出邊數、角數、面數</span>
+    <span class="obj-chip">學會形狀拼組與堆疊</span>
+  </div>
+
+  <!-- 5-1 平面圖形 -->
+  <div class="section">
+    <h2>📐 5-1 平面圖形</h2>
+    <p>平面圖形是<strong style="color:var(--yellow)">畫在紙上</strong>的形狀，有「邊」和「角」。</p>
+    <div class="shape-grid">
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="#ffd54f" fill-opacity="0.35" stroke="#ffd54f" stroke-width="3"/></svg>
+        <div class="shape-name">圓</div>
+        <div class="shape-info">沒有角｜邊是彎的</div>
+      </div>
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><polygon points="40,12 70,68 10,68" fill="#81d4fa" fill-opacity="0.35" stroke="#81d4fa" stroke-width="3"/></svg>
+        <div class="shape-name">三角形</div>
+        <div class="shape-info">3 個邊｜3 個角</div>
+      </div>
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><rect x="14" y="14" width="52" height="52" fill="#a5d6a7" fill-opacity="0.35" stroke="#a5d6a7" stroke-width="3"/></svg>
+        <div class="shape-name">正方形</div>
+        <div class="shape-info">4 邊一樣長｜4 個直角</div>
+      </div>
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><rect x="6" y="22" width="68" height="36" fill="#ce93d8" fill-opacity="0.35" stroke="#ce93d8" stroke-width="3"/></svg>
+        <div class="shape-name">長方形</div>
+        <div class="shape-info">4 個直角｜對邊一樣長</div>
+      </div>
+    </div>
+    <div class="note">⭐ <strong>關鍵名詞：</strong>「角」是兩條邊相交的地方；「邊」是圖形的線。</div>
+  </div>
+
+  <!-- 5-2 立體形體 -->
+  <div class="section">
+    <h2>🧊 5-2 立體形體</h2>
+    <p>立體形體是<strong style="color:var(--yellow)">可以拿起來</strong>的形狀，有「面」。</p>
+    <div class="shape-grid">
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><defs><radialGradient id="ball" cx="35%" cy="35%"><stop offset="0%" stop-color="#fff" stop-opacity=".8"/><stop offset="100%" stop-color="#ffd54f"/></radialGradient></defs><circle cx="40" cy="40" r="32" fill="url(#ball)" stroke="#ffd54f" stroke-width="2"/></svg>
+        <div class="shape-name">球</div>
+        <div class="shape-info">沒有平面｜可以滾</div>
+      </div>
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><ellipse cx="40" cy="18" rx="22" ry="6" fill="#81d4fa" fill-opacity=".7" stroke="#81d4fa" stroke-width="2"/><path d="M18,18 L18,62 Q40,72 62,62 L62,18" fill="#81d4fa" fill-opacity=".35" stroke="#81d4fa" stroke-width="2"/><ellipse cx="40" cy="62" rx="22" ry="6" fill="none" stroke="#81d4fa" stroke-width="2"/></svg>
+        <div class="shape-name">圓柱</div>
+        <div class="shape-info">2 個圓平面 + 彎面</div>
+      </div>
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><polygon points="14,28 54,28 66,16 26,16" fill="#a5d6a7" fill-opacity=".6" stroke="#a5d6a7" stroke-width="2"/><rect x="14" y="28" width="40" height="36" fill="#a5d6a7" fill-opacity=".35" stroke="#a5d6a7" stroke-width="2"/><polygon points="54,28 66,16 66,52 54,64" fill="#a5d6a7" fill-opacity=".5" stroke="#a5d6a7" stroke-width="2"/></svg>
+        <div class="shape-name">正方體</div>
+        <div class="shape-info">6 個正方形面</div>
+      </div>
+      <div class="shape-card">
+        <svg width="80" height="80" viewBox="0 0 80 80"><polygon points="8,32 56,32 70,18 22,18" fill="#ce93d8" fill-opacity=".6" stroke="#ce93d8" stroke-width="2"/><rect x="8" y="32" width="48" height="30" fill="#ce93d8" fill-opacity=".35" stroke="#ce93d8" stroke-width="2"/><polygon points="56,32 70,18 70,48 56,62" fill="#ce93d8" fill-opacity=".5" stroke="#ce93d8" stroke-width="2"/></svg>
+        <div class="shape-name">長方體</div>
+        <div class="shape-info">6 個長方形面</div>
+      </div>
+    </div>
+    <div class="note">⭐ <strong>關鍵名詞：</strong>「面」是立體形體上平整的部分。</div>
+  </div>
+
+  <!-- 5-3 拼組與堆疊 -->
+  <div class="section">
+    <h2>🧩 5-3 拼組與堆疊</h2>
+    <h3>平面拼組</h3>
+    <ul class="bullet">
+      <li>2 個一樣的三角形 → 可以拼成<strong style="color:var(--yellow)">正方形</strong>或<strong style="color:var(--yellow)">長方形</strong></li>
+      <li>4 個小正方形 → 可以拼成 1 個大正方形</li>
+      <li>2 個正方形並排 → 可以拼成長方形</li>
+    </ul>
+    <h3>立體堆疊</h3>
+    <ul class="bullet">
+      <li><strong style="color:var(--pink)">球</strong>會滾，<strong>不能</strong>放在底層</li>
+      <li><strong>圓柱</strong>要躺著才能再堆東西，立著只能堆在頂端</li>
+      <li><strong>長方體、正方體</strong>有平面，最適合當底層</li>
+    </ul>
+  </div>
+
+  <!-- 解題步驟 Accordion -->
+  <div class="section">
+    <h2>💡 解題步驟（點開展開）</h2>
+    <div class="solve-steps">
+      <div class="solve-item">
+        <button class="solve-head" onclick="toggleSolve(this)">例題 1：給特徵猜形狀</button>
+        <div class="solve-body">
+          <div class="example-q">特徵：有 3 個邊、3 個角，這是什麼形狀？</div>
+          <ol style="padding-left:24px">
+            <li>檢查「邊數」：3 個邊</li>
+            <li>檢查「角數」：3 個角</li>
+            <li>對照表格：圓 0 角｜三角 3 角｜正方/長方 4 角</li>
+          </ol>
+          <div class="example-a">答：三角形 △</div>
+          <hr style="border-color:rgba(255,255,255,.1);margin:10px 0">
+          <div class="example-q">再來一題：有 4 個邊，4 個邊都一樣長，4 個都是直角，這是什麼？</div>
+          <ol style="padding-left:24px">
+            <li>4 邊 → 排除圓、三角</li>
+            <li>4 邊一樣長 → 不是長方形（長方形是對邊一樣長）</li>
+          </ol>
+          <div class="example-a">答：正方形 ■</div>
+        </div>
+      </div>
+
+      <div class="solve-item">
+        <button class="solve-head" onclick="toggleSolve(this)">例題 2：兩個三角形可以拼成什麼？</button>
+        <div class="solve-body">
+          <div class="example-q">把 2 個一樣大的直角三角形拼在一起，可以變成什麼形狀？</div>
+          <ol style="padding-left:24px">
+            <li>把兩個三角形的「斜邊」對在一起</li>
+            <li>如果兩條短邊一樣長 → 拼出<strong style="color:var(--yellow)">正方形</strong></li>
+            <li>如果兩條短邊不一樣長 → 拼出<strong style="color:var(--yellow)">長方形</strong></li>
+          </ol>
+          <div class="example-a">答：可以拼成正方形 ■ 或長方形 ▭</div>
+          <div style="margin-top:10px;text-align:center">
+            <svg width="220" height="90" viewBox="0 0 220 90">
+              <polygon points="10,80 80,80 10,10" fill="#81d4fa" fill-opacity=".5" stroke="#81d4fa" stroke-width="2"/>
+              <polygon points="80,80 10,10 80,10" fill="#a5d6a7" fill-opacity=".5" stroke="#a5d6a7" stroke-width="2"/>
+              <text x="45" y="65" fill="#fff" font-size="13" text-anchor="middle">△＋△</text>
+              <text x="115" y="48" fill="#ffd54f" font-size="20" text-anchor="middle">→</text>
+              <rect x="140" y="20" width="60" height="60" fill="#ffd54f" fill-opacity=".4" stroke="#ffd54f" stroke-width="2"/>
+              <text x="170" y="55" fill="#fff" font-size="13" text-anchor="middle">正方形</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互動計算題 -->
+  <div class="section">
+    <h2>🧮 互動計算題（馬上試試看）</h2>
+    <p style="color:var(--chalk-dim);font-size:.9em;margin-bottom:12px">輸入數字後按「確認」，會立刻檢查對錯。</p>
+    <div class="calc-grid">
+      <div class="calc-item">
+        <div class="calc-q">1. 三角形有幾個角？</div>
+        <input class="calc-input" data-ans="3" placeholder="?"><span class="calc-unit">個</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">2. 正方形有幾個邊？</div>
+        <input class="calc-input" data-ans="4" placeholder="?"><span class="calc-unit">個</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">3. 正方體（骰子）有幾個面？</div>
+        <input class="calc-input" data-ans="6" placeholder="?"><span class="calc-unit">個</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+      <div class="calc-item">
+        <div class="calc-q">4. 長方形「對邊一樣長」，總共有幾組對邊？</div>
+        <input class="calc-input" data-ans="2" placeholder="?"><span class="calc-unit">組</span>
+        <button class="calc-btn" onclick="checkCalc(this)">確認</button>
+        <span class="calc-feedback"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互動實驗：形狀辨識器 -->
+  <div class="section">
+    <h2>🎮 互動實驗：形狀辨識器</h2>
+    <p style="color:var(--chalk-dim);font-size:.9em;margin-bottom:14px">從下拉選單選擇一個形狀，看看它長什麼樣子，並認識它的特徵。點圖形還會變色喔！</p>
+
+    <div style="text-align:center;margin-bottom:14px">
+      <label style="color:var(--green);font-weight:700;margin-right:8px">選擇形狀：</label>
+      <select id="shape-sel" style="padding:8px 14px;border-radius:8px;border:2px solid var(--yellow);background:#162616;color:var(--yellow);font-family:inherit;font-size:1em;cursor:pointer">
+        <optgroup label="📐 平面圖形">
+          <option value="circle">圓</option>
+          <option value="triangle">三角形</option>
+          <option value="square">正方形</option>
+          <option value="rect">長方形</option>
+        </optgroup>
+        <optgroup label="🧊 立體形體">
+          <option value="ball">球</option>
+          <option value="cylinder">圓柱</option>
+          <option value="cube">正方體</option>
+          <option value="cuboid">長方體</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div style="background:#fff;border-radius:10px;padding:20px;display:flex;justify-content:center;align-items:center;min-height:240px">
+      <svg id="shape-svg" width="100%" viewBox="0 0 300 220" style="max-width:360px;cursor:pointer"></svg>
+    </div>
+
+    <div style="background:rgba(0,0,0,.25);border-radius:8px;padding:14px;margin-top:14px;text-align:center;font-size:1.05em" id="shape-info">
+      <strong style="color:var(--yellow)">圓</strong>｜類型：平面圖形｜邊：彎曲 1 條｜角：0 個
+    </div>
+    <p style="color:var(--chalk-dim);font-size:.85em;margin-top:8px;text-align:center">💡 點擊白板裡的形狀，可以幫它換顏色！</p>
+  </div>
+
+  <!-- 關鍵名詞 -->
+  <div class="section">
+    <h2>關鍵名詞</h2>
+    <table>
+      <tr><th>名詞</th><th>說明</th></tr>
+      <tr><td>角</td><td>兩條邊相交的地方</td></tr>
+      <tr><td>邊</td><td>圖形的線（直線或彎線）</td></tr>
+      <tr><td>面</td><td>立體形體上平整的部分</td></tr>
+      <tr><td>平面圖形</td><td>畫在紙上的形狀（圓、三角形、正方形、長方形）</td></tr>
+      <tr><td>立體形體</td><td>可以拿起來的形狀（球、圓柱、正方體、長方體）</td></tr>
+    </table>
+  </div>
+
+  <!-- 形成性評量 -->
+  <div class="section">
+    <h2>✅ 形成性評量</h2>
+
+    <h3>選擇題</h3>
+    <div class="quiz-item">
+      <div class="quiz-q">1. 以下哪一個是「平面圖形」？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. 球</button>
+        <button onclick="checkQ(this,'wrong')">B. 圓柱</button>
+        <button onclick="checkQ(this,'correct')">C. 三角形</button>
+        <button onclick="checkQ(this,'wrong')">D. 正方體</button>
+      </div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">2. 「4 個直角、4 個邊都一樣長」是什麼形狀？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'wrong')">A. 長方形</button>
+        <button onclick="checkQ(this,'correct')">B. 正方形</button>
+        <button onclick="checkQ(this,'wrong')">C. 三角形</button>
+        <button onclick="checkQ(this,'wrong')">D. 圓</button>
+      </div>
+    </div>
+    <div class="quiz-item">
+      <div class="quiz-q">3. 下列哪個立體形體「最容易」滾動？</div>
+      <div class="quiz-opts">
+        <button onclick="checkQ(this,'correct')">A. 球</button>
+        <button onclick="checkQ(this,'wrong')">B. 正方體</button>
+        <button onclick="checkQ(this,'wrong')">C. 長方體</button>
+        <button onclick="checkQ(this,'wrong')">D. 都不會滾</button>
+      </div>
+    </div>
+
+    <h3>是非題</h3>
+    <div class="tf-item">
+      <div class="tf-q">1. 正方形也算是一種特殊的長方形。</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'correct')">○ 對</button>
+        <button onclick="checkTF(this,'wrong')">✗ 錯</button>
+      </div>
+      <div style="font-size:.85em;color:var(--chalk-dim);margin-top:4px">提示：正方形也有 4 個直角，符合長方形的條件。</div>
+    </div>
+    <div class="tf-item">
+      <div class="tf-q">2. 圓有 1 個角。</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'wrong')">○ 對</button>
+        <button onclick="checkTF(this,'correct')">✗ 錯</button>
+      </div>
+      <div style="font-size:.85em;color:var(--chalk-dim);margin-top:4px">提示：圓沒有角，邊是彎的。</div>
+    </div>
+    <div class="tf-item">
+      <div class="tf-q">3. 球有 6 個面。</div>
+      <div class="tf-btns">
+        <button onclick="checkTF(this,'wrong')">○ 對</button>
+        <button onclick="checkTF(this,'correct')">✗ 錯</button>
+      </div>
+      <div style="font-size:.85em;color:var(--chalk-dim);margin-top:4px">提示：球沒有平面。有 6 個面的是正方體和長方體。</div>
+    </div>
+
+    <h3>填空題</h3>
+    <div class="fill-item">
+      <div class="fill-q">1. 三角形有 ___ 個邊。</div>
+      <input class="fill-input" data-ans="3" placeholder="？">
+      <button class="fill-btn" onclick="checkFill(this)">確認</button>
+      <span class="fill-feedback"></span>
+    </div>
+    <div class="fill-item">
+      <div class="fill-q">2. 正方體有 ___ 個面。</div>
+      <input class="fill-input" data-ans="6" placeholder="？">
+      <button class="fill-btn" onclick="checkFill(this)">確認</button>
+      <span class="fill-feedback"></span>
+    </div>
+  </div>
+
+  <!-- 簡報 placeholder -->
+  <div class="section">
+    <h2>📊 授課簡報</h2>
+    <div class="placeholder-box">
+      📄 NotebookLM 簡報待生成<br>
+      <span style="font-size:.85em">未來將放置 <code>../assets/U5_slide_01.jpg</code> ~ <code>U5_slide_20.jpg</code></span>
+    </div>
+  </div>
+
+  <!-- 影片 placeholder -->
+  <div class="section">
+    <h2>🎥 學生自學影片</h2>
+    <div class="placeholder-box">
+      ▶️ YouTube 影片待上傳<br>
+      <span style="font-size:.85em">未來將以 iframe 嵌入 unlisted 影片</span>
+    </div>
+  </div>
+
+  <!-- 教師模式 -->
+  <div id="teacher-only">
+    <div class="section">
+      <h2>👩‍🏫 教師備課區</h2>
+      <h3>教學策略</h3>
+      <ul class="bullet">
+        <li><strong>實物觸摸：</strong>準備球、骰子、易開罐、面紙盒，讓學生「閉眼摸」感受面、邊、角</li>
+        <li><strong>剪貼拼圖：</strong>給學生彩色紙剪出三角形，自由拼出正方形、長方形、菱形</li>
+        <li><strong>立體積木：</strong>用教具堆疊塔，討論「為什麼球放底層整座會倒？」</li>
+        <li><strong>分類遊戲：</strong>給一堆形狀卡，請學生分成「平面 / 立體」兩堆</li>
+        <li><strong>校園尋寶：</strong>找校園裡的圓形（時鐘）、長方形（門）、圓柱（柱子）、球（地球儀）</li>
+      </ul>
+      <h3>Bloom 認知層次</h3>
+      <table>
+        <tr><th>層次</th><th>學習表現</th></tr>
+        <tr><td style="color:var(--blue)">記憶理解</td><td>能說出 4 種平面圖形與 4 種立體形體的名稱，並指出邊、角、面</td></tr>
+        <tr><td style="color:var(--green)">應用</td><td>能依特徵描述（邊數、角數、面數）判斷出是哪一種形狀</td></tr>
+        <tr><td style="color:var(--orange)">分析</td><td>能比較正方形與長方形的異同、能解釋為什麼球不適合放底層</td></tr>
+      </table>
+      <h3>易錯點提醒</h3>
+      <ul class="bullet">
+        <li style="color:var(--pink)"><strong>正方形 / 長方形混用：</strong>學生常把所有四邊形都叫「方形」。強調「正方形 4 邊都一樣長」、「長方形對邊一樣長」</li>
+        <li style="color:var(--pink)"><strong>平面 / 立體混用：</strong>學生會說「球是圓形」。強調「圓是平面，球是立體可以拿起來」</li>
+        <li style="color:var(--pink)"><strong>角的概念模糊：</strong>學生會說圓「有 1 個角」（指圓邊本身）。澄清角是「兩條直邊相交」</li>
+        <li style="color:var(--pink)"><strong>面的數量誤算：</strong>正方體 / 長方體都是 6 個面，圓柱是 2 個圓面 + 1 個彎面（不算 3 個平面）</li>
+        <li style="color:var(--pink)"><strong>三角形以為一定是「正三角形」：</strong>強調任何有 3 個邊 3 個角的圖形都是三角形</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// 右側工具面板
+document.getElementById('tool-toggle').onclick=function(){document.getElementById('tool-content').classList.toggle('open');};
+var fsize=18;
+function setFsize(n){fsize=Math.min(28,Math.max(12,n));document.body.style.fontSize=fsize+'px';document.getElementById('font-val').textContent=fsize+'px';}
+document.getElementById('font-inc').onclick=function(){setFsize(fsize+2);};
+document.getElementById('font-dec').onclick=function(){setFsize(fsize-2);};
+
+// 計時器
+var tSec=300,tRunning=false,tInterval=null;
+var tDisp=document.getElementById('timer-disp');
+var tStart=document.getElementById('timer-start');
+function tFmt(s){var m=Math.floor(s/60),sc=s%60;return(m<10?'0':'')+m+':'+(sc<10?'0':'')+sc;}
+function tTick(){if(tSec<=0){clearInterval(tInterval);tRunning=false;tDisp.textContent='00:00';tDisp.className='timer-disp ended';tStart.textContent='▶ 開始';tStart.classList.remove('on');return;}tSec--;tDisp.textContent=tFmt(tSec);}
+tStart.onclick=function(){if(tRunning){clearInterval(tInterval);tRunning=false;tDisp.classList.remove('running');this.textContent='▶ 開始';this.classList.remove('on');}else{tInterval=setInterval(tTick,1000);tRunning=true;tDisp.className='timer-disp running';this.textContent='⏸ 暫停';this.classList.add('on');}};
+document.getElementById('timer-reset').onclick=function(){clearInterval(tInterval);tRunning=false;tDisp.className='timer-disp';tStart.textContent='▶ 開始';tStart.classList.remove('on');tDisp.textContent=tFmt(tSec);};
+document.querySelectorAll('.timer-preset').forEach(function(btn){btn.onclick=function(){clearInterval(tInterval);tRunning=false;tSec=parseInt(this.dataset.sec);tDisp.className='timer-disp';tDisp.textContent=tFmt(tSec);tStart.textContent='▶ 開始';tStart.classList.remove('on');}});
+
+// 畫筆 canvas
+var canvas=document.getElementById('draw-canvas');
+var ctx=canvas.getContext('2d');
+var drawOn=false,drawing=false,dColor='#ffd54f',dSize=7;
+function resizeCanvas(){var data=ctx.getImageData(0,0,canvas.width||1,canvas.height||1);canvas.width=window.innerWidth;canvas.height=window.innerHeight;ctx.putImageData(data,0,0);ctx.lineCap='round';ctx.lineJoin='round';}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+document.getElementById('draw-toggle').onclick=function(){drawOn=!drawOn;canvas.classList.toggle('active',drawOn);this.textContent=drawOn?'✅ 關閉畫筆':'🖌️ 開啟畫筆';this.classList.toggle('on',drawOn);};
+document.getElementById('draw-clear').onclick=function(){ctx.clearRect(0,0,canvas.width,canvas.height);};
+document.querySelectorAll('.draw-color').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-color').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dColor=this.dataset.color;}});
+document.querySelectorAll('.draw-size').forEach(function(el){el.onclick=function(){document.querySelectorAll('.draw-size').forEach(function(e){e.classList.remove('active');});this.classList.add('active');dSize=parseInt(this.dataset.size);}});
+function pos(e){var r=canvas.getBoundingClientRect();if(e.touches)return{x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};return{x:e.clientX-r.left,y:e.clientY-r.top};}
+canvas.addEventListener('mousedown',function(e){drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;});
+canvas.addEventListener('mousemove',function(e){if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+canvas.addEventListener('mouseup',function(){drawing=false;});
+canvas.addEventListener('mouseleave',function(){drawing=false;});
+canvas.addEventListener('touchstart',function(e){e.preventDefault();drawing=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.strokeStyle=dColor;ctx.lineWidth=dSize;},{passive:false});
+canvas.addEventListener('touchmove',function(e){e.preventDefault();if(!drawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+canvas.addEventListener('touchend',function(){drawing=false;});
+</script>
+
+<script>
+function setMode(m){
+  document.querySelectorAll('.mode-btn').forEach(function(b,i){
+    b.classList.toggle('active', (m==='student'&&i===0)||(m==='teacher'&&i===1));
+  });
+  document.getElementById('teacher-only').style.display = m==='teacher'?'block':'none';
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+function toggleSolve(btn){
+  btn.parentNode.classList.toggle('open');
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+function checkQ(btn,result){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(result);
+}
+function checkTF(btn,result){
+  if(btn.classList.contains('correct')||btn.classList.contains('wrong')) return;
+  btn.classList.add(result);
+}
+function checkFill(btn){
+  var input = btn.previousElementSibling;
+  var fb = btn.nextElementSibling;
+  var ans = input.getAttribute('data-ans');
+  if(input.value.trim() === ans){
+    fb.textContent='✔ 正確！'; fb.style.color='var(--green)';
+    input.style.borderColor='var(--green)';
+  } else {
+    fb.textContent='✘ 再想想，答案是 '+ans; fb.style.color='var(--pink)';
+    input.style.borderColor='var(--pink)';
+  }
+}
+function checkCalc(btn){
+  var item = btn.closest('.calc-item');
+  var input = item.querySelector('.calc-input');
+  var fb = item.querySelector('.calc-feedback');
+  var raw = input.value.trim();
+  var ans = input.dataset.ans;
+  var ok = (raw === ans);
+  if (!ok) {
+    var rawNum = parseFloat(raw), ansNum = parseFloat(ans);
+    if (!isNaN(rawNum) && !isNaN(ansNum) && Math.abs(rawNum - ansNum) < 0.01) ok = true;
+  }
+  fb.textContent = ok ? '✓ 答對了！' : '✗ 正確答案：' + ans;
+  fb.className = 'calc-feedback ' + (ok ? 'correct' : 'wrong');
+  input.style.borderColor = ok ? 'var(--green)' : 'var(--pink)';
+}
+
+// 形狀辨識器
+var shapeColors = ['#ffd54f','#ff8a80','#81d4fa','#a5d6a7','#ce93d8','#ffb74d'];
+var shapeColorIdx = 0;
+var shapeData = {
+  circle:   { type:'平面圖形', edge:'彎曲 1 條', angle:'0 個', face:'—', name:'圓' },
+  triangle: { type:'平面圖形', edge:'3 條',     angle:'3 個', face:'—', name:'三角形' },
+  square:   { type:'平面圖形', edge:'4 條（一樣長）', angle:'4 個直角', face:'—', name:'正方形' },
+  rect:     { type:'平面圖形', edge:'4 條（對邊一樣長）', angle:'4 個直角', face:'—', name:'長方形' },
+  ball:     { type:'立體形體', edge:'—', angle:'—', face:'0 個平面（可滾動）', name:'球' },
+  cylinder: { type:'立體形體', edge:'—', angle:'—', face:'2 個圓面 + 1 個彎面', name:'圓柱' },
+  cube:     { type:'立體形體', edge:'12 條',  angle:'8 個頂點', face:'6 個正方形面', name:'正方體' },
+  cuboid:   { type:'立體形體', edge:'12 條',  angle:'8 個頂點', face:'6 個長方形面', name:'長方體' }
+};
+function shapeSVG(key, color){
+  var c = color || '#ffd54f';
+  switch(key){
+    case 'circle':   return '<circle cx="150" cy="110" r="80" fill="'+c+'" fill-opacity="0.45" stroke="'+c+'" stroke-width="4"/>';
+    case 'triangle': return '<polygon points="150,30 230,180 70,180" fill="'+c+'" fill-opacity="0.45" stroke="'+c+'" stroke-width="4"/>';
+    case 'square':   return '<rect x="80" y="40" width="140" height="140" fill="'+c+'" fill-opacity="0.45" stroke="'+c+'" stroke-width="4"/>';
+    case 'rect':     return '<rect x="40" y="70" width="220" height="90" fill="'+c+'" fill-opacity="0.45" stroke="'+c+'" stroke-width="4"/>';
+    case 'ball':     return '<defs><radialGradient id="bg" cx="35%" cy="35%"><stop offset="0%" stop-color="#fff" stop-opacity=".85"/><stop offset="100%" stop-color="'+c+'"/></radialGradient></defs><circle cx="150" cy="110" r="80" fill="url(#bg)" stroke="'+c+'" stroke-width="3"/>';
+    case 'cylinder': return '<ellipse cx="150" cy="40" rx="60" ry="14" fill="'+c+'" fill-opacity=".75" stroke="'+c+'" stroke-width="3"/><path d="M90,40 L90,170 Q150,194 210,170 L210,40" fill="'+c+'" fill-opacity=".4" stroke="'+c+'" stroke-width="3"/><ellipse cx="150" cy="170" rx="60" ry="14" fill="none" stroke="'+c+'" stroke-width="3"/>';
+    case 'cube':     return '<polygon points="60,70 180,70 220,40 100,40" fill="'+c+'" fill-opacity=".65" stroke="'+c+'" stroke-width="3"/><rect x="60" y="70" width="120" height="120" fill="'+c+'" fill-opacity=".4" stroke="'+c+'" stroke-width="3"/><polygon points="180,70 220,40 220,160 180,190" fill="'+c+'" fill-opacity=".55" stroke="'+c+'" stroke-width="3"/>';
+    case 'cuboid':   return '<polygon points="40,80 200,80 240,40 80,40" fill="'+c+'" fill-opacity=".65" stroke="'+c+'" stroke-width="3"/><rect x="40" y="80" width="160" height="100" fill="'+c+'" fill-opacity=".4" stroke="'+c+'" stroke-width="3"/><polygon points="200,80 240,40 240,140 200,180" fill="'+c+'" fill-opacity=".55" stroke="'+c+'" stroke-width="3"/>';
+  }
+  return '';
+}
+function renderShape(){
+  var key = document.getElementById('shape-sel').value;
+  var color = shapeColors[shapeColorIdx % shapeColors.length];
+  document.getElementById('shape-svg').innerHTML = shapeSVG(key, color);
+  var d = shapeData[key];
+  var info = '<strong style="color:var(--yellow)">' + d.name + '</strong>｜類型：' + d.type;
+  if (d.type === '平面圖形') {
+    info += '｜邊：' + d.edge + '｜角：' + d.angle;
+  } else {
+    info += '｜' + d.face;
+  }
+  document.getElementById('shape-info').innerHTML = info;
+}
+document.getElementById('shape-sel').addEventListener('change', function(){ shapeColorIdx = 0; renderShape(); });
+document.getElementById('shape-svg').addEventListener('click', function(){ shapeColorIdx++; renderShape(); });
+renderShape();
+</script>
+</body>
+</html>
